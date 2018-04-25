@@ -3,7 +3,7 @@ import "./tile.css";
 
 const Tile = props => {
 	return (
-		<div id="tile"> </div>
+		<div className="tile"> </div>
 	);
 };
 

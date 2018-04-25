@@ -6,12 +6,19 @@ class Game extends Component {
 	
 	state = {
 		characters: [],
-		width: window.innerWidth,
-		height: window.innerHeight
+		width: `96vw`,
+		height: `96vh`
 	};
 
-	handleCharacterClick = props => {
+	componentDidMount() {
+		this.setState({
+			width: `96vw`,
+			height: `96vh`
+		});
+	}
 
+	handleCharacterClick = props => {
+		alert("click!");
 	}
 
 	resolveAttack = props => {
@@ -20,7 +27,7 @@ class Game extends Component {
  
 	render(){
 		return(
-			<Board handleCharacterClick={this.handleCharacterClick} resolveAttack={this.resolveAttack}/>
+			<Board handleCharacterClick={this.handleCharacterClick} resolveAttack={this.resolveAttack} width={this.state.width} height={this.state.height} />
 		);
 	}
 }
