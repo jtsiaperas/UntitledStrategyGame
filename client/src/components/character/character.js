@@ -13,12 +13,14 @@ class Character extends Component {
     		health: props.health,
     		id: props.id,
     		handleCharacterClick: props.handleCharacterClick,
-    		resolveAttack: props.resolveAttack
+    		resolveAttack: props.resolveAttack,
+        location: props.location
   		};
 	}
 
+
 	render(){
-		return(<div className="character" type={this.state.type} id={this.state.id} onClick={this.state.handleCharacterClick}></div>);
+		return(<div className="character" type={this.state.type} id={this.state.id} onClick={this.state.handleCharacterClick} location={this.state.location}> </div>);
 	}	
 };
 
