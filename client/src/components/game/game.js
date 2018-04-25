@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import {Loop, Stage} from "react-game-kit";
 import Board from "../board";
 import "./game.css";
 
@@ -8,8 +9,26 @@ class Game extends Component {
 		characters: []
 	};
 
+	componentDidMount() {
+    	
+  	}
+
+  	componentWillUnmount() {
+    	
+    }
+
+ 	update() {
+    // tick logic
+  	}
+
 	render(){
-		return(<Board />);
+		return(
+			<Loop>
+				<Stage>
+					<Board />
+				</Stage>
+			</Loop>
+		);
 	}
 }
 

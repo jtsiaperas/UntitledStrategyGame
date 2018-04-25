@@ -3,6 +3,7 @@ import Game from "./components/game";
 import "./App.css";
 
 const App = () => (
+	
 	<Game />
 );
 
