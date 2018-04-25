@@ -1,33 +1,26 @@
 import React, {Component} from "react";
-import {Loop, Stage} from "react-game-kit";
 import Board from "../board";
 import "./game.css";
 
 class Game extends Component {
 	
 	state = {
-		characters: []
+		characters: [],
+		width: window.innerWidth,
+		height: window.innerHeight
 	};
 
-	componentDidMount() {
-    	
-  	}
+	handleCharacterClick = props => {
 
-  	componentWillUnmount() {
-    	
-    }
+	}
 
- 	update() {
-    // tick logic
-  	}
+	resolveAttack = props => {
 
+	}
+ 
 	render(){
 		return(
-			<Loop>
-				<Stage>
-					<Board />
-				</Stage>
-			</Loop>
+			<Board handleCharacterClick={this.handleCharacterClick} resolveAttack={this.resolveAttack}/>
 		);
 	}
 }
