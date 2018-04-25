@@ -5,7 +5,7 @@ import "./tile.css";
 const Tile = props => {
 	return (
 		<div className="tile" id={props.id}>
-			<Character resolveAttack={props.resolveAttack} handleCharacterClick={props.handleCharacterClick} />
+			{props.character? (<Character resolveAttack={props.resolveAttack} handleCharacterClick={props.handleCharacterClick} />) : (<div></div>) }
 		</div>
 	);
 };

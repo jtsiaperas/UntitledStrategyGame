@@ -1,13 +1,13 @@
 
 const map = [
-	[0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0]
+	[{type:0,character:false},{type:0,character:true},{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false}],
+	[{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false}],
+	[{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false}],
+	[{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false}],
+	[{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false}],
+	[{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false}],
+	[{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false}],
+	[{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false},{type:0,character:false}]
 ];
 
 export default map;
