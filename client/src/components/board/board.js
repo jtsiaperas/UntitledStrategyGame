@@ -8,7 +8,7 @@ const Board = props => {
 			{props.tiles.map(function(row, rowIndex){
 				return row.map(function(col, colIndex){
 					let keyValue = rowIndex.toString()+colIndex;
-					return <Tile handleCharacterClick={props.handleCharacterClick} resolveAttack={props.resolveAttack} key={keyValue} positionY={rowIndex} positionX={colIndex} type={col.type} character={col.character} id={keyValue} />
+					return <Tile handleCharacterClick={props.handleCharacterClick} handleMove = {props.handleMove} resolveAttack={props.resolveAttack} key={keyValue} positionY={rowIndex} positionX={colIndex} type={col.type} character={col.character} id={keyValue} />
 				});
 			})
 

@@ -16,7 +16,8 @@ class Character extends Component {
     		resolveAttack: props.resolveAttack,
         location: props.location
   		};
-	}
+
+  }
 
 
 	render(){
