@@ -64,12 +64,23 @@ class Game extends Component {
 						{	
 							tiles[x-dx][y-dy].type = "orange";
 						}
-						
-						tiles[x-dx][y+dy].type = "orange";
+						if(y+dy < 8)
+						{
+							tiles[x-dx][y+dy].type = "orange";
+						}
 					}
 
-					tiles[x+dx][y-dy].type = "orange";
-					tiles[x+dx][y+dy].type = "orange";
+					if(x+dx < 8)
+					{
+						if(y-dy >= 0)
+						{	
+							tiles[x+dx][y-dy].type = "orange";
+						}
+						if (y+dy < 8)
+						{
+							tiles[x+dx][y+dy].type = "orange";
+						}
+					}
 				}
 			}
 		}
