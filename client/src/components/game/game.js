@@ -97,7 +97,12 @@ class Game extends Component {
 			character.location = target.id;
 			tiles[newX][newY].character = character;
 
-			
+			tiles.forEach(row => {
+				row.forEach(tile => {
+					tile.type = 0;
+				});
+			});
+
 			this.setState({tiles: tiles, lastClicked: false});
 		}	
 
