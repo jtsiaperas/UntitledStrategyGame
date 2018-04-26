@@ -29,44 +29,57 @@ class Game extends Component {
 		let tiles = this.state.tiles.slice();
 		let characters = this.state.characters.slice();
 		characters[character.id] = character;
+		let range = 0;
+		let color = "";
+		console.log(character);
+		if(character.didMove)
+		{
+			range = 1;
+			color = "red";
+		}
+		else
+		{
+			range = character.skill;
+			color = "orange";
+		}
 
-		for(let dx=1; dx<=character.skill; dx++)
+		for(let dx=1; dx<=range; dx++)
 		{
 			
 			if(x-dx >= 0)
 			{				
-				tiles[x-dx][y].type = "orange";
+				tiles[x-dx][y].type = color;
 			}
 			
 			if(x+dx < 8)
 			{	
-				tiles[x+dx][y].type = "orange";
+				tiles[x+dx][y].type = color;
 			}
 
-			for(let dy=1; dy<=character.skill; dy++)
+			for(let dy=1; dy<=range; dy++)
 			{
 				
 				if(y-dy >= 0)
 				{
-					tiles[x][y-dy].type = "orange";
+					tiles[x][y-dy].type = color;
 				}
 
 				if(y+dy < 8)
 				{
-					tiles[x][y+dy].type = "orange";
+					tiles[x][y+dy].type = color;
 				}
 
-				if (dy === dx && dy+dx <= character.skill)
+				if (dy === dx && dy+dx <= range)
 				{
 					if(x-dx >= 0)
 					{
 						if(y-dy >= 0)
 						{	
-							tiles[x-dx][y-dy].type = "orange";
+							tiles[x-dx][y-dy].type = color;
 						}
 						if(y+dy < 8)
 						{
-							tiles[x-dx][y+dy].type = "orange";
+							tiles[x-dx][y+dy].type = color;
 						}
 					}
 
@@ -74,11 +87,11 @@ class Game extends Component {
 					{
 						if(y-dy >= 0)
 						{	
-							tiles[x+dx][y-dy].type = "orange";
+							tiles[x+dx][y-dy].type = color;
 						}
 						if (y+dy < 8)
 						{
-							tiles[x+dx][y+dy].type = "orange";
+							tiles[x+dx][y+dy].type = color;
 						}
 					}
 				}
@@ -106,6 +119,8 @@ class Game extends Component {
 			let newY = parseInt(tileIndex[1]);
 
 			character.location = target.id;
+			character.didMove = true;
+			console.log(character);
 			tiles[newX][newY].character = character;
 
 			tiles.forEach(row => {

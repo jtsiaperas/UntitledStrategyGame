@@ -14,6 +14,7 @@ class Character extends Component {
     		id: (props.id)?(props.id):(null),
     		handleCharacterClick: props.handleCharacterClick,
     		resolveAttack: props.resolveAttack,
+        didMove: false,
         location: props.location
   		};
 
