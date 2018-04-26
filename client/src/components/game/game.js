@@ -21,23 +21,29 @@ class Game extends Component {
 	}
 
 	handleCharacterClick = character => {
-		alert("click!");
+		
 		const position = character.location.split("");
-		let [x,y] = position;
+		let x = parseInt(position[0]);
+		let y = parseInt(position[1]);
 		let tiles = this.state.tiles.slice();
-
-		for(let dx=0; dx<character.skill; dx++)
+		
+		for(let dx=1; dx<character.skill; dx++)
 		{
-			if(x-dx > 0)
-			{
-				tiles[y][(x-dx)].type = "orange";
+			
+			if(x-dx >= 0)
+			{				
+				tiles[x-dx][y].type = "orange";
 			}
+				
+				tiles[x+dx][y].type = "orange";
 
-			for(let dy=0; dy<character.skill; dy++)
+			for(let dy=1; dy<character.skill; dy++)
 			{
 				
 			}
 		}
+		
+		this.setState({tiles: tiles});
 	}
 
 	resolveAttack = props => {
@@ -45,6 +51,7 @@ class Game extends Component {
 	}
  
 	render(){
+		
 		return(
 			<Board handleCharacterClick={this.handleCharacterClick} resolveAttack={this.resolveAttack} width={this.state.width} height={this.state.height} characters={this.state.characters} tiles={this.state.tiles} />
 		);
