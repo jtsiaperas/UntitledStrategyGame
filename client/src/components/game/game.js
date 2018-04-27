@@ -103,11 +103,15 @@ class Game extends Component {
 		
 			this.setState({tiles: tiles, lastClicked: character, characters: characters});
 		}
+
+		else{
+			this.resolveAttack({attacker: this.state.lastClicked, defender:character});
+		}
 	}
 
 	handleMove = (target) => {
 
-		if (target.type === "orange" && this.state.lastClicked)
+		if (target.type === "orange" && this.state.lastClicked && !this.state.tiles[target.positionX][target.positionY].character)
 		{
 			let tiles = this.state.tiles.slice();
 			let characters = this.state.characters.slice();
@@ -141,7 +145,34 @@ class Game extends Component {
 	}
 
 	resolveAttack = props => {
+		alert("attack!");
+		let characters = this.state.characters.slice();
+		let tiles = this.state.tiles.slice();
+		let hits = 0;
+		let toWound = 4+(props.attacker.skill-props.defender.skill);
+		
+		for (let i = 0; i<props.attacker.strength; i++)
+		{
+			let roll = Math.floor(Math.random()*6) + 1;
+			if (roll <= toWound)
+			{
+				hits++;
+			}
+		}
 
+		props.defender.health -= hits;
+
+		if (props.defender.health > 0)
+		{	
+			characters[props.defender.id] = props.defender;
+		}
+		else
+		{
+			tiles[props.defender.location[0]][props.defender.location[1]].character = false;
+			characters[props.defender.id] = false;
+		}
+
+		this.setState({characters: characters, tiles: tiles});
 	}
  
 	render(){
