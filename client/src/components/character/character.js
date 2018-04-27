@@ -11,11 +11,11 @@ class Character extends Component {
     		strength: (props.character.strength)?(props.character.strength):(null),
     		skill: (props.character.skill)?(props.character.skill):(null),
     		health: (props.character.health)?(props.character.health):(null),
-    		id: (props.id)?(props.id):(null),
+    		id: (props.id),
     		handleCharacterClick: props.handleCharacterClick,
     		resolveAttack: props.resolveAttack,
-        didMove: false,
-        location: props.location
+        didMove: props.character.didMove,
+        location: [props.positionX,props.positionY]
   		};
 
   }
