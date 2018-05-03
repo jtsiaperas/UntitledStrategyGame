@@ -17,7 +17,10 @@
     "nodemon": "^1.11.0"
   },
   "dependencies": {
+    "connect-ensure-login": "^0.1.1",
     "express": "^4.15.4",
+    "passport": "^0.4.0",
+    "passport-auth0": "^0.6.1",
     "react-game-kit": "^1.0.6"
   }
 }

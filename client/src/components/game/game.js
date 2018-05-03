@@ -10,24 +10,30 @@ class Game extends Component {
 		width: `96vw`,
 		height: `96vh`,
 		tiles: [],
-		lastClicked: false
+		active: false,
+		target:{},
+		tileWidth:"",
+		tileHeight:""
 	};
 
 	componentDidMount() {
+		let tileWidth = Math.floor(2000/8);
+		let tileHeight = Math.floor(1500/8);
 		this.setState({
-			width: `96vw`,
-			height: `96vh`,
+			width: `2000px`,
+			height: `1500px`,
 			tiles: map,
+			tileHeight: tileHeight,
+			tileWidth: tileWidth
 		});
 	}
 
 	handleCharacterClick = character => {
 		
-		if(!this.state.lastClicked)
+		if(this.state.active === character || !this.state.active)
 		{	
 			let x = character.location[0];
 			let y = character.location[1];
-
 			let tiles = this.state.tiles.slice();
 			let characters = this.state.characters.slice();
 			let range = 0;
@@ -101,21 +107,21 @@ class Game extends Component {
 				}
 			}
 		
-			this.setState({tiles: tiles, lastClicked: character, characters: characters});
+			this.setState({tiles: tiles, characters: characters, active: character});
 		}
 
 		else{
-			this.resolveAttack({attacker: this.state.lastClicked, defender:character});
+			this.resolveAttack({attacker: this.state.active, defender:character});
 		}
 	}
 
 	handleMove = (target) => {
 
-		if (target.type === "orange" && this.state.lastClicked && !this.state.tiles[target.positionX][target.positionY].character)
+		if (target.type === "orange" && this.state.active && !target.character)
 		{
 			let tiles = this.state.tiles.slice();
 			let characters = this.state.characters.slice();
-			let character = characters[this.state.lastClicked.id];
+			let character = this.state.active;
 			let oldTile = character.location
 			let oldX = oldTile[0];
 			let oldY = oldTile[1];
@@ -137,9 +143,7 @@ class Game extends Component {
 				});
 			});
 
-			console.log(characters);
-
-			this.setState({tiles: tiles, lastClicked: false, characters: characters});
+			this.setState({tiles: tiles, active: false, characters: characters});
 		}	
 
 	}
@@ -178,7 +182,9 @@ class Game extends Component {
 	render(){
 		
 		return(
-			<Board handleMove={this.handleMove} handleCharacterClick={this.handleCharacterClick} resolveAttack={this.resolveAttack} width={this.state.width} height={this.state.height} characters={this.state.characters} tiles={this.state.tiles} />
+			<div id="view">
+			<Board handleMove={this.handleMove} handleCharacterClick={this.handleCharacterClick} resolveAttack={this.resolveAttack} width={this.state.width} tileWidth={this.state.tileWidth} tileHeight={this.state.tileHeight} height={this.state.height} characters={this.state.characters} tiles={this.state.tiles} />
+			</div>
 		);
 	}
 }
