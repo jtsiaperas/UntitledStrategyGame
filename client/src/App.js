@@ -1,16 +1,25 @@
-import React from "react";
-import {Router,Route} from "react-router-dom";
-import Menu from "./components/menu";
+import React,{Component} from "react";
+import Menu from "./components/menu"; 
 import "./App.css";
 
-const App = () => (
-	<div className="container">
-	<Router>
-		<Route exact path = "/" component={Menu} />
-		<Route exact path = "/newGame" component={Menu} />
-		<Route exact path = "/loadGame" component={Menu} />
-	</Router>
-	</div>
-);
+class App extends Component {
+	constructor(props) {
+	super(props);
+
+	}
+
+  goTo(route) {
+    this.props.history.replace(`/${route}`)
+  }
+
+
+  render() {
+   		
+		return(
+			<Menu loggedIn = {this.props.auth.isAuthenticated} goTo = {route => this.props.history.replace(`/${route}`)} login = {this.props.auth.login} logout = {this.props.auth.logout} />
+			
+		);
+	}
+}
 
 export default App;

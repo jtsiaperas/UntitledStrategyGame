@@ -1,22 +1,21 @@
-import {React,Component} from "react";
-import { login, logout, isLoggedIn } from '../utils/authenticationTool';
-import "./board.css";
+import React from "react";
+import "./menu.css";
 
-const Menu =() => {
-
+const Menu = props => {
+		console.log(props);
 		return(
 			<div id = "menu">
-				{(isLoggedIn()) ?
+				{props.loggedIn() ?
 					(
 						<div className = "row">
-						<button className = "btn" onClick="window.location.href='/newGame'"> New Game </button>
-						<button className = "btn" onClick="window.location.href='/loadGame'"> Load Game </button>
-						<button className = "btn" onClick={() => logout()}> Log Out </button>
+						<button className = "btn" onClick={() => props.goTo("newGame")}> New Game </button>
+						<button className = "btn" onClick={() => props.goTo('loadGame')}> Load Game </button>
+						<button className = "btn" onClick={() => props.logout()}> Log Out </button>
 						</div>
 					):
 				 	(
 						
-						<button className = "btn" onClick={() => login()}> Log In / Sign Up </button>
+						<button className = "btn" onClick={() => props.login()}> Log In / Sign Up </button>
 					) 
 				}	
 			</div>
