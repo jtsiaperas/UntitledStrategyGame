@@ -2,6 +2,7 @@ import React from "react";
 import "./menu.css";
 
 const Menu = props => {
+	
 		console.log(props);
 		return(
 			<div id = "menu">

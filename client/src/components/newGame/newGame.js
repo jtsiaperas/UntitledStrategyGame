@@ -6,7 +6,7 @@ class NewGame extends Component {
 	constructor(props) {
 		super(props);
 		this.state ={
-			user: localStorage.getItem('id_token')
+			user: localStorage.getItem('user')
 		}
 	}
 	

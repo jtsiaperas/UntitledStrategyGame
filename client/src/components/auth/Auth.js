@@ -19,10 +19,27 @@ export default class Auth {
     this.logout = this.logout.bind(this);
     this.handleAuthentication = this.handleAuthentication.bind(this);
     this.isAuthenticated = this.isAuthenticated.bind(this);
+    this.getProfile = this.getProfile.bind(this);
   }
 
  login() {
     this.auth0.authorize();
+  }
+
+  
+  getProfile() {
+     var accessToken = localStorage.getItem('access_token');
+
+    if (!accessToken) {
+      console.log('Access Token must exist to fetch profile');
+    }
+
+    this.auth0.client.userInfo(accessToken, function(err, profile) {
+      if (profile) {
+        localStorage.setItem('profile', `${profile.sub}`);
+        
+      }
+    });
   }
 
   handleAuthentication() {

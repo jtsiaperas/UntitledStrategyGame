@@ -48,7 +48,7 @@ app.post("api/user", authCheck, function(req,res){
 	.catch(err => res.json(err));
 });
 
-app.get("api/arenas/", authCheck, function(req,res){
+app.get("api/arenas", authCheck, function(req,res){
 	db.Arena.find({})
 	.then(arenas => res.json(arenas))
 	.catch(err => res.json(err));
@@ -69,14 +69,14 @@ app.post("api/save", authCheck, function(req,res){
 	.catch(err => res.json(err));
 });
 
-app.delete("api/save", authCheck, function(req,res){
-	db.Save.remove({_id: req.saveId})
+app.delete("api/save/:id", authCheck, function(req,res){
+	db.Save.remove({_id: req.params.id})
 	.then(() => res.send("success"))
 	.catch(err => res.json(err));
 });
 
-app.get("/api/load", authCheck, function(req,res){
-	db.User.findOne({_id: req.id})
+app.get("/api/load/:id", authCheck, function(req,res){
+	db.User.findOne({_id: req.params.id})
 	.populate("saves")
 	.then(user => res.json(user))
 	.catch(err => res.json(err));

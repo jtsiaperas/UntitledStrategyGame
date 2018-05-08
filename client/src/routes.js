@@ -16,16 +16,21 @@ const handleAuthentication = (nextState, replace) => {
 }
 
 export const makeMainRoutes = () => {
+  auth.getProfile();
   return (
     <Router history={history}>
       <div>
         <Route exact path="/" render={(props) => <App {...props} auth={auth} />} />
         <Route path="/callback" render={(props) => {
           handleAuthentication(props);
-          return <Callback {...props} />}
+          return <Callback {...props} auth={auth}/>}
         }/>
-        <Route exact path="/newGame" render={(props) => <NewGame {...props} />} />
-        <Route exact path="/loadGame" render={(props) => <LoadGame {...props} />} />
+        <Route exact path="/newGame" render={(props) => {
+          handleAuthentication(props);
+          return <NewGame {...props} auth={auth}/>} }/>
+        <Route exact path="/loadGame" render={(props) => {
+          handleAuthentication(props);
+          return <LoadGame {...props} auth={auth}/>} }/>
       </div>
     </Router>
   );
