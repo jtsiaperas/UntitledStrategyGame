@@ -42,13 +42,28 @@ var CharacterSchema = new Schema({
   	type:String,
   	required: true
   },
+  weakness: {
+    type:String,
+    required: true
+  },
+  immunity: {
+    type: String,
+    required: true
+  },
   pointValue: {
   	type: Number,
   	required: true
   },
-  image: {
-  	type: Number,
-  	required: true
+  x: {
+    type: Number,
+    required: true
+  },
+  y: {
+    type: Number,
+    required: true
+  },
+  position: {
+    type: Array
   }
   
 });

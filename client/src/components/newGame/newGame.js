@@ -1,6 +1,10 @@
 import React, {Component} from "react";
 import API from "../../utils/API.js";
-import factions from "../../../public/factions.js";
+import factions from "../../factions.js";
+import Game from "../game";
+import FactionChoice from "../factionChoice";
+import ArenaChoice from "../arenaChoice";
+import ArmyChoice from "../armyChoice"
 import "./newGame.css";
 
 class NewGame extends Component {
@@ -9,12 +13,25 @@ class NewGame extends Component {
 		super(props);
 		this.state ={
 			user: localStorage.getItem('user'),
-			arenas: API.getArenas(),
+			arenas: [],
 			characters: false,
 			chose: false,
 			points: 0,
-			faction: false
+			faction: false,
+			startGame: false,
+			army:false
 		}
+	}
+
+	componentDidMount(){
+		console.log(factions);
+		API.getArenas().then(arenas=>
+			{
+				console.log(arenas);
+				this.setState({arenas:arenas});
+			}
+		).catch(err=> alert(err));
+		
 	}
 	
 	chooseArena = arena =>{
@@ -23,72 +40,59 @@ class NewGame extends Component {
 	}
 
 	chooseFaction = faction =>{
-		let characters = API.getCharacters(faction);
-		this.setState({faction: faction, characters: characters});
+		API.getCharacters(faction).then(
+			characters=>
+				this.setState({faction: faction, characters: characters})
+		).catch(err=> alert(err));
+		
+	}
+
+	chooseCharacter = character =>{
+		let army = [];
+		let startGame = false;
+		if(this.state.army)
+		{
+			army = this.state.army.slice();
+		}
+		let points = this.state.points - character.points;
+		if (points >=0)
+		{
+			army.push[character];
+			if(points == 0)
+			{
+				startGame = true;
+			}
+			this.setState({points:points,army:army,startGame:startGame});
+		}
+		else
+		{
+			alert("This character exceeds point limit!");
+		}
+	
+		
 	}
 		
  	render(){
 		
 		return(
 			<div id="newGame">
-			{this.state.faction ?(
-				<div className="row">
-				{characters.forEach(character =>
-					return(
-					<div className="col">
-						<div className="card">
-						<div className="card-header">
-								{character.name}
-							</div>
-							<div className="card-body">
-								<p>
-									{character.description}
-								</p>
-							</div>
-						</div>
-					</div>	
-					);
-				)}
+			{this.state.startGame?(
 
-				):
-				</div>
+				<Game arena={this.state.chose} characters={this.state.army} {...this.props} /> ):
+				(	
+					this.state.faction ?(
+						<ArmyChoice characters={this.state.characters} chooseCharacter={this.chooseCharacter} points={this.state.points} />
+					):
+					(this.state.chose ? (
+							<FactionChoice factions={this.state.factions} chooseFaction={this.chooseFaction} />
+						):
+						(
+							<ArenaChoice arenas={this.state.arenas} chooseArena={this.chooseArena} />
+						)
 
-				(this.state.chose ? (
-				{factions.forEach(faction => {
-					return(
-						<div className="card" onClick={()=>this.chooseFaction(faction)}>
-							<div className="card-header">
-								{faction.name}
-							</div>
-							<div className="card-body">
-								<p>
-									{faction.description}
-								</p>
-							</div>
-						</div>
-					);
-				});}
-				):
-				(
-				{arenas.forEach(arena => {
-					return(
-						<div className="card" onClick={()=>this.chooseArena(arena)}>
-							<div className="card-header">
-								{arena.name}
-							</div>
-							<div className="card-body">
-								<p>
-									{arena.description}
-								</p>
-							</div>
-						</div>
-					);
-				});}
-			)
-			)
+					)
+				)
 			}
-
-
 			</div>
 		);
 	}

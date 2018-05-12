@@ -7,6 +7,8 @@ const mongoose = require("mongoose");
 const jwt = require('express-jwt');
 const jwks = require('jwks-rsa');
 const cors = require('cors');
+const arenas = require('./arenas.js');
+const characters = require('./characters.js');
 require('dotenv').config();
 
 
@@ -27,6 +29,15 @@ const authCheck = jwt({
     issuer: `${process.env.AUTHO_DOMAIN}`,
     algorithms: ['RS256']
 });
+
+
+// Require all models
+const db = require("./models");
+
+//set mongoDB for local or heroku
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/strategyGame";
+
+//connect to database
 
 
 // Serve up static assets (usually on heroku)
@@ -82,10 +93,17 @@ app.get("/api/load/:id", authCheck, function(req,res){
 	.catch(err => res.json(err));
 });
 
-app.get("*",  function(req, res) {
-  res.sendFile(path.join(__dirname, "./client/build/index.html"));
-});
 
-app.listen(PORT, function() {
-  console.log(`🌎 ==> Server now on port ${PORT}!`);
-});
+mongoose.connect(MONGODB_URI).then(
+() => {
+	db.Arena.remove({},err=>console.log(err));
+	db.Character.remove({},err=>console.log(err));
+	db.Arena.insertMany(arenas).catch(err=> console.log(err));
+	db.Character.insertMany(characters).catch(err=>console.log(err));
+	app.listen(PORT, function() {
+	
+  	console.log(`🌎 ==> Server now on port ${PORT}!`);
+	});
+	}
+).catch(err => console.log(err));
+

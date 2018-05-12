@@ -6,8 +6,8 @@ var Schema = mongoose.Schema;
 // Using the Schema constructor, create a new UserSchema object
 // This is similar to a Sequelize model
 var ArenaSchema = new Schema({
-  // `title` is required and of type String
-  title: {
+  // name is required and of type String
+  name: {
     type: String,
     required: true
   },
@@ -17,11 +17,21 @@ var ArenaSchema = new Schema({
     required: true
   },
 
-  size:{
-    type: String,
+  rows:{
+    type: Number,
     required: true
   },
 
+  cols:{
+    type: Number,
+    required: true
+  },
+
+  points:{
+    type: Number,
+    required: true
+  },
+  
   tiles: {
     type: Array,
     default: []
