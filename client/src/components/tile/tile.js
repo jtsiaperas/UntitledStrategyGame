@@ -4,8 +4,8 @@ import "./tile.css";
 
 const Tile = props => {
 	return (
-		<div className={`tile ${props.type}`} id={props.id} onClick={() => props.handleMove({id: props.id, type: props.type})} >
-			{(props.character) ? (<Character resolveAttack={props.resolveAttack} handleCharacterClick={props.handleCharacterClick} character={props.character} location={props.id}/>) : (<div></div>) }
+		<div style={{width: `${props.width}`, height: `${props.height}`}} className={`tile ${props.type}`} id={props.id} onClick={() => props.handleMove({id: props.id, type: props.type, positionX: props.positionX, positionY: props.positionY})} >
+			{(props.character) ? (<Character resolveAttack={props.resolveAttack} id={props.character.id} handleCharacterClick={props.handleCharacterClick} character={props.character} positionX={props.positionX} positionY={props.positionY} />) : (<div></div>) }
 		</div>
 	);
 };

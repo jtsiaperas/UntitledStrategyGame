@@ -4,17 +4,16 @@ import "./board.css";
 
 const Board = props => {
 	return(
-		<div id = "board" style={{width: `${props.width}`, height: `${props.height}`}}>
+		<canvas id = "board" width={props.width} height={props.height} >
 			{props.tiles.map(function(row, rowIndex){
 				return row.map(function(col, colIndex){
 					let keyValue = rowIndex.toString()+colIndex;
-					return <Tile handleCharacterClick={props.handleCharacterClick} handleMove = {props.handleMove} resolveAttack={props.resolveAttack} key={keyValue} positionY={rowIndex} positionX={colIndex} type={col.type} character={col.character} id={keyValue} />
+					return <Tile handleCharacterClick={props.handleCharacterClick} height={props.tileHeight} width={props.tileWidth} handleMove = {props.handleMove} resolveAttack={props.resolveAttack} key={keyValue} positionY={colIndex} positionX={rowIndex} type={col.type} character={col.character} id={keyValue} />
 				});
 			})
 
 			}
-			
-		</div>
+		</canvas>
 	);
 };
 
