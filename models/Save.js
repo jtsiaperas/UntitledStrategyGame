@@ -18,26 +18,17 @@ var SaveSchema = new Schema({
   },
   
   active: {
-    type: Schema.Types.ObjectId,
-    ref: "Character"
-  },
-
-  points: {
-    type: Number,
-    required: true
+    type: Array
   },
 
   arena: {
     type: Schema.Types.ObjectId,
     ref: "Arena"
   },
-  // `characters` is an array of objects containing a character id
-  // The ref property links the ObjectId to the Character model
-  // This allows us to populate the array with associated characters
-  characters: [{
-    type: Schema.Types.ObjectId,
-    ref: "Character"
-  }]
+ 
+  characters: {
+    type: Array
+  }
 });
 
 // This creates our model from the above schema, using mongoose's model method

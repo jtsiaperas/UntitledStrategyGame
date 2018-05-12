@@ -22,10 +22,10 @@ var ArenaSchema = new Schema({
     required: true
   },
 
-  tiles: {[
-    type: Schema.Types.ObjectId,
-    ref: "Tile"
-  ]}
+  tiles: {
+    type: Array,
+    default: []
+  }
 
 });
 

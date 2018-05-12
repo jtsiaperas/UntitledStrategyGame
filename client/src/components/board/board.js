@@ -4,7 +4,7 @@ import "./board.css";
 
 const Board = props => {
 	return(
-		<div id = "board" style={{width: `${props.width}`, height: `${props.height}`}}>
+		<canvas id = "board" width={props.width} height={props.height} >
 			{props.tiles.map(function(row, rowIndex){
 				return row.map(function(col, colIndex){
 					let keyValue = rowIndex.toString()+colIndex;
@@ -13,8 +13,7 @@ const Board = props => {
 			})
 
 			}
-			
-		</div>
+		</canvas>
 	);
 };
 

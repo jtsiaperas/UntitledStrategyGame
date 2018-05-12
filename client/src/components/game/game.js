@@ -6,25 +6,19 @@ import "./game.css";
 class Game extends Component {
 	
 	state = {
-		characters: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		characters:[],
 		width: `96vw`,
 		height: `96vh`,
 		tiles: [],
 		active: false,
 		target:{},
-		tileWidth:"",
-		tileHeight:""
+		tileWidth:32,
+		tileHeight:32
 	};
 
 	componentDidMount() {
-		let tileWidth = Math.floor(2000/8);
-		let tileHeight = Math.floor(1500/8);
 		this.setState({
-			width: `2000px`,
-			height: `1500px`,
 			tiles: map,
-			tileHeight: tileHeight,
-			tileWidth: tileWidth
 		});
 	}
 

@@ -42,20 +42,12 @@ var CharacterSchema = new Schema({
   	type:String,
   	required: true
   },
-  weakness: {
-  	type: String,
-  	required: true
-  },
-  special: {
-  	type: String,
-  	required: true
-  },
   pointValue: {
   	type: Number,
   	required: true
   },
   image: {
-  	type: String,
+  	type: Number,
   	required: true
   }
   
