@@ -9,26 +9,25 @@ import "./newGame.css";
 
 class NewGame extends Component {
 	
-	constructor(props) {
-		super(props);
-		this.state ={
-			user: localStorage.getItem('user'),
-			arenas: [],
-			characters: false,
-			chose: false,
-			points: 0,
-			faction: false,
-			startGame: false,
-			army:false
-		}
+	state = {
+		user: localStorage.getItem('user'),
+		arenas:false,
+		characters: false,
+		chose: false,
+		points: 0,
+		faction: false,
+		startGame: false,
+		army:false
+	
 	}
 
 	componentDidMount(){
 		console.log(factions);
 		API.getArenas().then(arenas=>
 			{
-				console.log(arenas);
-				this.setState({arenas:arenas});
+				let results = arenas.data.slice();
+				console.log(results);
+				this.setState({arenas:results});
 			}
 		).catch(err=> alert(err));
 		
@@ -42,7 +41,7 @@ class NewGame extends Component {
 	chooseFaction = faction =>{
 		API.getCharacters(faction).then(
 			characters=>
-				this.setState({faction: faction, characters: characters})
+				this.setState({faction: faction, characters: characters.data})
 		).catch(err=> alert(err));
 		
 	}
@@ -54,7 +53,7 @@ class NewGame extends Component {
 		{
 			army = this.state.army.slice();
 		}
-		let points = this.state.points - character.points;
+		let points = this.state.points - character.pointValue;
 		if (points >=0)
 		{
 			army.push[character];
@@ -84,7 +83,7 @@ class NewGame extends Component {
 						<ArmyChoice characters={this.state.characters} chooseCharacter={this.chooseCharacter} points={this.state.points} />
 					):
 					(this.state.chose ? (
-							<FactionChoice factions={this.state.factions} chooseFaction={this.chooseFaction} />
+							<FactionChoice factions={factions} chooseFaction={this.chooseFaction} />
 						):
 						(
 							<ArenaChoice arenas={this.state.arenas} chooseArena={this.chooseArena} />

@@ -5,10 +5,10 @@ const FactionChoice = props => {
 	
 		return(
 			<div id = "factionChoice">
-				{
-					props.factions.map(faction => {
+				{	props.factions ? (
+					props.factions.map((faction,index) => {
 						return(
-						<div className="card" onClick={()=>props.choosefaction(faction)}>
+						<div className="card" key={index} onClick={()=>props.chooseFaction(faction.name)}>
 							<div className="card-header">
 								{faction.name}
 							</div>
@@ -20,6 +20,7 @@ const FactionChoice = props => {
 						</div>
 						);
 					})
+					):(<div></div>)
 				}	
 			</div>
 		);
