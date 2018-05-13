@@ -4,5 +4,5 @@ module.exports = {
   Save: require("./Save"),
   Character: require("./Character"),
   Arena: require("./Arena"),
-  Tile: require("./Tile")
-};
+  User: require("./User")
+}

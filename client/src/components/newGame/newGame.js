@@ -25,12 +25,12 @@ class NewGame extends Component {
 
 	componentDidMount(){
 		console.log(factions);
-		API.getArenas().then(arenas=>
+		API.getArenas(this.props.auth).then(arenas=>
 			{
 				console.log(arenas);
 				this.setState({arenas:arenas});
 			}
-		).catch(err=> alert(err));
+		).catch(err=> console.log(err));
 		
 	}
 	
@@ -40,10 +40,10 @@ class NewGame extends Component {
 	}
 
 	chooseFaction = faction =>{
-		API.getCharacters(faction).then(
+		API.getCharacters(this.props.auth,faction).then(
 			characters=>
 				this.setState({faction: faction, characters: characters})
-		).catch(err=> alert(err));
+		).catch(err=> console.log(err));
 		
 	}
 
