@@ -1,28 +1,32 @@
 import React, {Component} from "react";
 import Board from "../board";
-import map from "./map.js";
 import "./game.css";
 
 class Game extends Component {
-	
-	state = {
-		characters:[],
-		width: `96vw`,
-		height: `96vh`,
-		tiles: [],
-		active: false,
-		target:{},
-		tileWidth:32,
-		tileHeight:32
-	};
+	constructor(props){
+		super(props);
 
+		this.state = {
+			characters:props.characters,
+			width: "",
+			height: "",
+			tiles: props.arena.tiles,
+			active: false,
+			target: false,
+			tileSize:props.arena.tileSize,
+			zoom:2,
+			rows:props.arena.rows,
+			cols:props.arena.cols
+		};
+	}
 	componentDidMount() {
-		this.setState({
-			tiles: map,
-		});
+		let width = document.documentElement.clientWidth;
+		let height = document.documentElement.clientHeight;
+	
+		this.setState({width:width,height:height});
 	}
 
-	handleCharacterClick = character => {
+	handleClick = character => {
 		
 		if(this.state.active === character || !this.state.active)
 		{	
@@ -177,7 +181,7 @@ class Game extends Component {
 		
 		return(
 			<div id="view">
-			<Board handleMove={this.handleMove} handleCharacterClick={this.handleCharacterClick} resolveAttack={this.resolveAttack} width={this.state.width} tileWidth={this.state.tileWidth} tileHeight={this.state.tileHeight} height={this.state.height} characters={this.state.characters} tiles={this.state.tiles} />
+			<Board handleMove={this.handleMove} handleCharacterClick={this.handleCharacterClick} resolveAttack={this.resolveAttack} width={this.state.width} tileSize={this.state.tileSize} height={this.state.height} characters={this.state.characters} tiles={this.state.tiles} rows={this.state.rows} cols={this.state.cols} />
 			</div>
 		);
 	}

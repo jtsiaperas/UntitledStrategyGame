@@ -119,10 +119,8 @@ tileSheet.src = "./tileSheet.png";
 var drawTiles = (arena,context,tileSheet) =>{
 	arena.tiles.map((row,indexR) => {
 		row.map((col,indexC) =>{
-			let key = Object.keys(tiles[col]);
-			console.log(key);
-			var x = tiles[col][key].x;
-			var y = tiles[col][key].y;
+			const x = col.x;
+			const y = col.y;
 			console.log(x);
 			console.log(y);
 			var canvasX = indexC * arena.tilesize;
