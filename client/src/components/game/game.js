@@ -15,19 +15,17 @@ class Game extends Component {
 			rows:props.arena.rows,
 			cols:props.arena.cols
 		};
+
+		
 	}
 	componentDidMount() {
-	
+		let tiles = this.state.tiles.slice()
+ 		tiles.forEach(row=> row.forEach(col => col.occupied = false ));
+ 		this.setState({tiles:tiles});
 	}
 
 	
- 	componentDidUpdate(){
- 		let width = document.documentElement.clientWidth;
- 		let height = document.documentElement.clientHeight;
- 		this.setState({width: width, height: height});
- 	}
-
-	render(){
+ 	render(){
 		
 		return(
 			<div id="view">

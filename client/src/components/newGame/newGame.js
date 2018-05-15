@@ -7,6 +7,7 @@ import ArenaChoice from "../arenaChoice";
 import ArmyChoice from "../armyChoice"
 import "./newGame.css";
 
+
 class NewGame extends Component {
 	
 	state = {
@@ -17,8 +18,7 @@ class NewGame extends Component {
 		points: 0,
 		faction: false,
 		startGame: false,
-		army:false
-	
+		army:[]	
 	}
 
 	componentDidMount(){
@@ -46,17 +46,15 @@ class NewGame extends Component {
 		
 	}
 
-	chooseCharacter = character =>{
-		let army = [];
+	chooseCharacter = index =>{
+		let characters = this.state.characters.slice();
+		let character = Object.assign({},characters[index]);
+		let army = this.state.army.slice();
 		let startGame = false;
-		if(this.state.army)
-		{
-			army = this.state.army.slice();
-		}
 		let points = this.state.points - character.pointValue;
 		if (points >=0)
 		{
-			army.push[character];
+			army.push(character);
 			if(points == 0)
 			{
 				startGame = true;

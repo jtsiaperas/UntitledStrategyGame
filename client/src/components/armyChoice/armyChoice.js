@@ -13,7 +13,7 @@ const ArmyChoice = props => {
 						props.characters.map((character,index) =>{
 						return(
 						<div className="col" key={index}>
-							<div className="card"  onClick={()=>props.chooseCharacter(character)}>
+							<div className="card"  onClick={()=>props.chooseCharacter(index)}>
 							<div className="card-header">
 								{character.name}
 							</div>
