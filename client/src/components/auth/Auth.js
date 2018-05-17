@@ -33,13 +33,13 @@ export default class Auth {
     if (!accessToken) {
       console.log('Access Token must exist to fetch profile');
     }
-
-    this.auth0.client.userInfo(accessToken, function(err, profile) {
-      if (profile) {
-        localStorage.setItem('profile', `${profile.sub}`);
-        
-      }
-    });
+    else {
+      this.auth0.client.userInfo(accessToken, function(err, profile) {
+        if (profile) {
+          localStorage.setItem('profile', `${profile.sub}`);
+        }
+      });
+    }
   }
 
   handleAuthentication() {

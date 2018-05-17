@@ -54,6 +54,7 @@ class NewGame extends Component {
 		let points = this.state.points - character.pointValue;
 		if (points >=0)
 		{
+			character.id = army.length;
 			army.push(character);
 			if(points == 0)
 			{
@@ -72,7 +73,7 @@ class NewGame extends Component {
  	render(){
 		
 		return(
-			<div id="newGame">
+			<div id="newGame" className="container">
 			{this.state.startGame?(
 
 				<Game arena={this.state.chose} characters={this.state.army} {...this.props} /> ):
