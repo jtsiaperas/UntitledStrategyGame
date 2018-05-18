@@ -80,6 +80,7 @@ class NewGame extends Component {
 		if (points >=0)
 		{
 			character.id = army.length;
+			character.owner = player;
 			army.push(character);
 
 			if(points === 0 && this.state.player1Done && this.state.player1Army.length > 0)

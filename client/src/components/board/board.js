@@ -10,7 +10,7 @@ class Board extends Component{
 			context: "",
 			offsetX:"",
 			offsetY:"",
-			zoom:2,
+			zoom:1,
 			highlights:[],
 			floaters:[],
 			active: false,
@@ -34,37 +34,30 @@ class Board extends Component{
 		let boardWidth = this.props.tileSize * this.props.cols;
 		let boardHeight = this.props.tileSize * this.props.rows;
 
-		let zoom = Math.floor(this.props.width/boardWidth);
-
 		canvas.width= this.props.width;
 		canvas.height= this.props.height;
 
-		var offsetX = 0;
+		
 		var offsetY = 0;
+		var offsetX = 0;
 
-  		if(offsetY < 0)
-  		{
-  			offsetY = 32;
-  		}
-  		if (offsetX < 0)
-  		{
-  			offsetX = 32;
-  		}
-
-		var ctx = canvas.getContext('2d');
-		ctx.scale(zoom,zoom);
+  		var ctx = canvas.getContext('2d');
+		
 		ctx.webkitImageSmoothingEnabled = false;
 		ctx.mozImageSmoothingEnabled = false;
 		ctx.imageSmoothingEnabled = false;
+		let zoom = canvas.height/(boardHeight);
+		canvas.width = boardWidth*zoom;
 
+		ctx.scale(zoom,zoom);
 		var spriteSheet = new Image();
-
+		
 		spriteSheet.src = require(`../../tileSheet.png`);
 		spriteSheet.onload = () => {
 			this.drawTiles(this.state.tiles,this.props.tileSize,ctx,spriteSheet,this.state.zoom,offsetX,offsetY);
 		}
 
-		this.setState({canvas: canvas, spriteSheet: spriteSheet, context: ctx, offsetY: offsetY, offsetX: offsetX, zoom: zoom});
+		this.setState({canvas: canvas, spriteSheet: spriteSheet, context: ctx, offsetX: offsetX, offsetY: offsetY, zoom: zoom});
 	}
 
 
@@ -96,11 +89,19 @@ class Board extends Component{
 			
 			context.globalAlpha = 0.5
 			context.fillStyle="black";
-   			context.font = "10px Courier New";
    			context.fillRect(canvasX,canvasY,32,10);
    			
-   			context.globalAlpha = 1;  			
-   			context.fillStyle="white";
+   			context.fillStyle="white"; 
+   			let number = 1;
+   			context.font = "bold 30px sans-serif";
+   			if(char.owner !== "player1")
+   			{
+   				number = 2;
+   			}
+   			context.fillText(number, canvasX+8, canvasY+32);
+   			context.globalAlpha = 1;
+   			 			
+   			context.font = "10px sans-serif";
 			context.fillText(char.strength, canvasX+2, canvasY+8);
 			context.fillText(char.health, canvasX+24, canvasY+8);
 			
@@ -124,36 +125,44 @@ class Board extends Component{
 
 	
 drawCharacterPool = (characters,tileSize,context,spriteSheet,zoom,offsetX,offsetY) =>{
-	let startX = 3*tileSize;
+	
+	let startX = (this.props.cols/4)*tileSize;
 	let startY = 3*tileSize;
-	if (!this.state.player1Turn)
+	
+	let num = 1;
+
+	if(!this.state.player1Turn)
 	{
-		startY *= 2;
-	}	
+		startY = 6*tileSize;
+		num = 2;
+	}
 
 	context.fillStyle="white";
-   	context.fillRect(startX-2,startY-2,(6*tileSize)+4,(3*tileSize)+4);
+   	context.fillRect(startX-2,startY-2,((this.props.cols/2)*tileSize)+4,(3*tileSize)+4);
 
   	context.fillStyle="black";
-   	context.fillRect(startX,startY,(6*tileSize),(3*tileSize));
+   	context.fillRect(startX,startY,((this.props.cols/2)*tileSize),(3*tileSize));
 
    	context.fillStyle="white";
-   	context.font = "18px Courier New";
-	context.fillText("Character Pool", startX+20, startY+20);
+   	context.font = "17px sans-serif";
+   	
+
+	context.fillText(`Deploy Player ${num} Troops`, startX+8, startY+18);
 	
 	context.fillStyle="white";
    	context.fillRect(startX,startY+30,(6*tileSize),2);
 
 	characters.forEach((char,index) => {
-		var x = char.x;
-		var y = char.y;
+		let x = char.x;
+		let y = char.y;
 
-		var canvasX = Math.floor((index * tileSize))+startX;
-		var canvasY = startY+32;
-		var canvasTileSize = tileSize;
-		if (index >= 6)
+		let canvasX = Math.floor((index * tileSize))+startX;
+		let canvasY = startY+32;
+		let canvasTileSize = tileSize;
+
+		if (index >= this.props.cols/2)
 		{
-			canvasX = ((index-6)*tileSize)+startX;
+			canvasX = ((index-(this.props.cols/2))*tileSize)+startX;
 			canvasY += 32;
 		}
 		context.drawImage(
@@ -171,18 +180,16 @@ drawCharacterPool = (characters,tileSize,context,spriteSheet,zoom,offsetX,offset
 }
 
 drawTiles = (tiles,tileSize,context,spriteSheet,zoom,offsetX,offsetY) =>{
-	if (!this.state.player1Turn)
-	{
-		offsetY = zoom*tileSize*(Math.floor(this.props.rows/2));
-	}
+	
+	
 	tiles.map((row,indexR) => {
 			
 		row.map((col,indexC) =>{
 			var x = col.x;
 			var y = col.y;
 				
-			var canvasX = (indexC * tileSize) + offsetX;
-			var canvasY = (indexR * tileSize) + offsetY;
+			var canvasX = (indexC * tileSize);
+			var canvasY = (indexR * tileSize);
 			
 			var canvasTileSize = tileSize;
 			context.drawImage(
@@ -201,7 +208,7 @@ drawTiles = (tiles,tileSize,context,spriteSheet,zoom,offsetX,offsetY) =>{
 	});
 }
 
-drawHighlights = (highlights,tileSize,context) =>{
+drawHighlights = (highlights,tileSize,context,offsetX,offsetY) =>{
 		
 		highlights.map(highlight => {
 			
@@ -218,134 +225,152 @@ drawHighlights = (highlights,tileSize,context) =>{
 
 handleClick = event => {
 		
-		let click = true;
+	let click = true;
+	
 		if(!this.state.charactersPlaced)
 		{
 			return this.placeCharacter(event);
 		}
-		else{
-		let x = Math.floor(event.clientX/(this.props.tileSize*this.state.zoom));
-		let y =  Math.floor(event.clientY/(this.props.tileSize*this.state.zoom));
-		if(x<this.props.cols&&y<this.props.rows&&x>=0&&y>=0)
-		{	
-			let tiles = this.state.tiles.slice();
-			let highlights = this.state.highlights.slice();
-		
-			if (!this.state.active && tiles[y][x].occupied)
-			{
-				let character = tiles[y][x].character;
-		
-				let range = 0;
-				let color = "";
-				highlights = [];
-				
-				if(character.didMove === true && !character.didAttack)
-				{
-					range = character.rangeMax;
-					color = "red";
-				}
-			
-				else if(!character.didMove)
-				{
-					range = character.skill;
-					color = "green";
-				}
 
-				for(let dx=1; dx<=range; dx++)
+		else
+		{
+			let x = Math.floor(event.clientX/(this.props.tileSize*this.state.zoom));
+			let y =  Math.floor(event.clientY/(this.props.tileSize*this.state.zoom));
+			
+			if(x<this.props.cols&&y<this.props.rows&&x>=0&&y>=0)
+			{	
+				let tiles = this.state.tiles.slice();
+				let highlights = this.state.highlights.slice();
+		
+				if (!this.state.active && tiles[y][x].occupied)
 				{
-			
-					if(x-dx >= 0)
-					{				
-						let newX = x-dx;
-						highlights.push({type:color,x:newX,y:y});
-					}
-			
-					if(x+dx < this.props.cols)
-					{	
-						let newX = x+dx;
-						highlights.push({type:color,x:newX,y:y});
-					}
-
-					for(let dy=1; dy<=range; dy++)
+					let character = tiles[y][x].character;
+					if(this.state.player1Turn && character.owner === "player2")
 					{
+						return alert("It is player 1's turn!");
+					}
+					else if(!this.state.player1Turn && character.owner === "player1")
+					{
+						return alert("It is player 2's turn!");
+					}
+
+					let range = 0;
+					let color = "";
+					highlights = [];
 				
-						if(y-dy >= 0)
-						{
-							let newY= y-dy;
-							highlights.push({type:color,x:x,y:newY});
+					if(character.didMove === true && !character.didAttack)
+					{
+						range = character.rangeMax;
+						color = "red";
+					}
+			
+					else if(!character.didMove)
+					{
+						range = character.skill;
+						color = "green";
+					}
+
+					for(let dx=1; dx<=range; dx++)
+					{
+			
+						if(x-dx >= 0)
+						{				
+							let newX = x-dx;
+							highlights.push({type:color,x:newX,y:y});
+						}
+			
+						if(x+dx < this.props.cols)
+						{	
+							let newX = x+dx;
+							highlights.push({type:color,x:newX,y:y});
 						}
 
-						if(y+dy < this.props.rows)
+						for(let dy=1; dy<=range; dy++)
 						{
-							let newY= y+dy;
-							highlights.push({type:color,x:x,y:newY});
-						}
-
-						if (dy === dx && dy+dx <= range)
-						{
-							if(x-dx >= 0)
+				
+							if(y-dy >= 0)
 							{
-								if(y-dy >= 0)
-								{	
-									let newY= y-dy;
-									let newX= x-dx;
-									highlights.push({type:color,x:newX,y:newY});
-								}	
-								if(y+dy < this.props.rows)
-								{
-									let newY= y+dy;
-									let newX= x-dx;
-									highlights.push({type:color,x:newX,y:newY});
-								}
+								let newY= y-dy;
+								highlights.push({type:color,x:x,y:newY});
 							}
 
-							if(x+dx < this.props.cols)
+							if(y+dy < this.props.rows)
 							{
-								if(y-dy >= 0)
-								{	
-									let newY= y-dy;
-									let newX= x+dx;
-									highlights.push({type:color,x:newX,y:newY});
-								}
-								if (y+dy < this.props.rows)
+								let newY= y+dy;
+								highlights.push({type:color,x:x,y:newY});
+							}
+
+							if (dy === dx && dy+dx <= range)
+							{
+								if(x-dx >= 0)
 								{
-									let newY= y+dy;
-									let newX= x+dx;
-									highlights.push({type:color,x:newX,y:newY});
+									if(y-dy >= 0)
+									{	
+										let newY= y-dy;
+										let newX= x-dx;
+										highlights.push({type:color,x:newX,y:newY});
+									}	
+									if(y+dy < this.props.rows)
+									{
+										let newY= y+dy;
+										let newX= x-dx;
+										highlights.push({type:color,x:newX,y:newY});
+									}
+								}
+
+								if(x+dx < this.props.cols)
+								{
+									if(y-dy >= 0)
+									{	
+										let newY= y-dy;
+										let newX= x+dx;
+										highlights.push({type:color,x:newX,y:newY});
+									}
+									if (y+dy < this.props.rows)
+									{
+										let newY= y+dy;
+										let newX= x+dx;
+										highlights.push({type:color,x:newX,y:newY});
+									}
 								}
 							}
 						}
 					}
+		
+				this.setState({tiles: tiles, active: character, highlights:highlights, click:click});
 				}
 		
-			this.setState({tiles: tiles, active: character, highlights:highlights, click:click});
-			}
-		
-			else if(tiles[y][x].occupied&&this.state.active){
-			this.resolveAttack({attacker: this.state.active, defender:tiles[y][x].character});
-			}
+				else if(tiles[y][x].occupied&&this.state.active)
+				{
+					this.resolveAttack({attacker: this.state.active, defender:tiles[y][x].character});
+				}
 	
-			else{
-				return this.handleMove(event);
+				else
+				{
+					return this.handleMove(event);
+				}
 			}
 			this.setState({click:click});
 		}
-	}
 }
-	placeCharacter = event =>{
+
+
+placeCharacter = event =>{
 		let click = true;
 		let x = Math.floor(event.clientX/(this.props.tileSize*this.state.zoom));
 		let y = Math.floor(event.clientY/(this.props.tileSize*this.state.zoom));
+		let highlights = [];
 		let characters = this.state.player1Characters.slice();
 		let army = this.state.player1Army.slice();
-		let player1 = false;
+		
 		if(!this.state.player1Turn){
 			characters = this.state.player2Characters.slice();
 			army = this.state.player2Army.slice();
 		}
-		let charactersPlaced = this.state.charactersPlaced;
+
 		let tiles = this.state.tiles.slice();
 		let active = false;
+
 		if (characters.length >= 1 && this.state.player1Turn)
 		{
 			if (x < this.props.cols && y < 2 && !tiles[y][x].occupied && this.state.active)
@@ -361,18 +386,24 @@ handleClick = event => {
 				console.log(characters);
 				
 			}
-			else if(x>2&&y>3)
+
+			else if(x>=(this.props.cols/4)&&y>3)
 			{
 				if (y == 5)
 				{
 					active = characters[x+3];
+
 				}
 				else
 				{
 					active = characters[x-3];
 				}
+				highlights.push({type:"blue",x:x,y:y});
 			}
+
+			this.setState({player1Army:army,player1Characters:characters, tiles: tiles, click: click, highlights: highlights, active:active});
 		}
+
 		else if (characters.length >=1 && !this.state.player1Turn)
 		{
 			if (x < this.props.cols && y > 9 && !tiles[y][x].occupied && this.state.active)
@@ -387,7 +418,7 @@ handleClick = event => {
 				characters = characters.filter(character => character.id !== char.id);
 				console.log(characters);
 			}
-			else if(x>2&&y>6)
+			else if(x>=(this.props.cols/4)&&y>6)
 			{
 				if (y == 8)
 				{
@@ -397,20 +428,22 @@ handleClick = event => {
 				{
 					active = characters[x-3];
 				}
+				highlights.push({type:"blue",x:x,y:y});
 			}
-		}
-		if (characters.length < 1 && this.state.player1Turn)
-		{
-			let ctx = this.state.context;
-			player1 = false;
-			ctx.clearRect(0,0,this.props.width,this.props.height);
+			this.setState({player2Army:army,player2Characters:characters, tiles: tiles, click:click, active:active, highlights: highlights});
 		}
 		
-		if(this.state.player1Turn)
-		{	
-			this.setState({player1Army:army,player1Characters:characters,charactersPlaced:charactersPlaced, tiles: tiles, click: click, active:active, player1Turn: player1});
+
+		if (characters.length < 1 && this.state.player1Turn)
+		{
+			this.setState({player1Turn:false});
 		}
-	}
+		else if (characters.length < 1 && !this.state.player1Turn)
+		{
+			this.setState({charactersPlaced:true, player1Turn:true});
+		}
+		
+}
 
 	handleMouseMove = event =>{
 		let x = Math.floor(event.clientX/(this.props.tileSize*this.state.zoom));
@@ -423,11 +456,35 @@ handleClick = event => {
 		}
 		this.setState({highlights: highlights, click:click});
 	}
-	handleMove = (event) => {
+	endTurn = () =>{
+		let player1Army = this.state.player1Army.slice();
+		
+		let player2Army = this.state.player2Army.slice();
+		
+
+		player1Army.forEach(char => {
+			char.didMove = false;
+			char.didAttack = false;
+		});
+
+		player2Army.forEach(char => {
+			char.didMove = false;
+			char.didAttack = false;
+		});
+
+		this.setState({player1Turn:!this.state.player1Turn,player2Army:player2Army,player1Army:player1Army});
+	}
+	handleMove = event => {
 		let newX = Math.floor(event.clientX/(this.props.tileSize*this.state.zoom));
 		let newY = Math.floor(event.clientY/(this.props.tileSize*this.state.zoom));
 		let tiles = this.state.tiles.slice();
-		let characters = this.state.characters.slice();
+		let characters = this.state.player1Army.slice();
+		
+		if(!this.state.player1Turn)
+		{
+			characters = this.state.player2Army.slice();
+		}
+
 		let character = this.state.active;
 		let highlights = [];
 		if (character && !tiles[newY][newX].occupied && !character.didMove)
@@ -447,6 +504,10 @@ handleClick = event => {
 				tiles[newY][newX].character = character;
 				tiles[newY][newX].occupied = true;
 			}
+			else
+			{
+				alert("Sorry, that is out of range!");
+			}
 
 		}	
 
@@ -455,14 +516,17 @@ handleClick = event => {
 
 	resolveAttack = props => {
 		
-		let playerArmy = this.state.playerArmy.slice();
+		let player1Army = this.state.player1Army.slice();
+		let player2Army = this.state.player2Army.slice();
 		let tiles = this.state.tiles.slice();
 		let highlights = [];
 		let hits = 0;
 		let toWound = 4+(props.attacker.skill-props.defender.skill);
 		let active = false;
 		let distance = Math.abs(props.attacker.position[0]-props.defender.position[0])+ Math.abs(props.attacker.position[1]-props.defender.position[1]);
-		if (!props.attacker.didAttack && distance <= props.attacker.rangeMax){
+		
+		if (!props.attacker.didAttack && distance <= props.attacker.rangeMax && props.attacker.owner != props.defender.owner)
+		{
 			for (let i = 0; i<props.attacker.strength; i++)
 			{
 				let roll = Math.floor(Math.random()*6) + 1;
@@ -478,25 +542,49 @@ handleClick = event => {
 			{
 				tiles[props.defender.position[1]][props.defender.position[0]].character = false;
 				tiles[props.defender.position[1]][props.defender.position[0]].occupied = false;
-				playerArmy = playerArmy.filter(char => props.defender.id != char.id);
+				if (props.defender.owner === "player1")
+				{
+					player1Army = player1Army.filter(char => props.defender.id != char.id);
+					if(player1Army.length < 1)
+					{
+						alert("Player 2 wins!");
+						window.location.replace("/");
+					}
+				}
+				else
+				{
+					player2Army = player2Army.filter(char => props.defender.id != char.id);
+					if(player2Army.length < 1)
+					{
+						alert("Player 1 wins!");
+						window.location.replace("/");
+					}
+				}
 			}
 			props.attacker.didAttack = true;
 		}
-		this.setState({playerArmy: playerArmy, tiles: tiles, highlights:highlights, active: active});
+		else if (props.defender.owner === props.attacker.owner)
+		{
+			alert("You should not attack your own troops!");
+		}
+
+		this.setState({player1Army: player1Army, player2Army: player2Army,tiles: tiles, highlights:highlights, active: active});
 	}
  	
 
 	render(){
 		if (this.state.context)
 		{
-			this.drawTiles(this.state.tiles,this.props.tileSize,this.state.context,this.state.spriteSheet,this.state.zoom,this.state.offsetX,this.state.offsetY);
+			this.drawTiles(this.state.tiles,this.props.tileSize,this.state.context,this.state.spriteSheet,this.state.offsetX,this.state.offsetY);
+			this.drawCharacters(this.state.player1Army,this.props.tileSize,this.state.context,this.state.spriteSheet,this.state.offsetX,this.state.offsetY);
+			this.drawCharacters(this.state.player2Army,this.props.tileSize,this.state.context,this.state.spriteSheet,this.state.offsetX,this.state.offsetY);
 			this.drawHighlights(this.state.highlights,this.props.tileSize,this.state.context,this.state.offsetX, this.state.offsetY);
-			this.drawCharacters(this.state.player1Army,this.props.tileSize,this.state.context,this.state.spriteSheet,this.state.zoom,this.state.offsetX,this.state.offsetY);
-			this.drawCharacters(this.state.player2Army,this.props.tileSize,this.state.context,this.state.spriteSheet,this.state.zoom,this.state.offsetX,this.state.offsetY);
 		}
 		return(
-			
+			<div>
 			<canvas ref={this.canvasRef} onClick={this.handleClick} onMouseMove={this.handleMouseMove} />
+			<button onClick={this.endTurn}>End Turn</button>
+			</div>
 		);
 	}
 	
