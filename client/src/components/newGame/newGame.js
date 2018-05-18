@@ -26,13 +26,13 @@ class NewGame extends Component {
 
 	componentDidMount(){
 		console.log(factions);
-		API.getArenas().then(arenas=>
+		API.getArenas(this.props.auth).then(arenas=>
 			{
 				let results = arenas.data.slice();
 				console.log(results);
 				this.setState({arenas:results});
 			}
-		).catch(err=> alert(err));
+		).catch(err=> console.log(err));
 		
 	}
 	
@@ -41,6 +41,7 @@ class NewGame extends Component {
 		let copiedArena = Object.assign({},arena);
 		this.setState({chose:copiedArena, points: points});
 	}
+
 
 	chooseFaction = (faction,player) =>{
 		API.getCharacters(faction).then(
@@ -57,6 +58,7 @@ class NewGame extends Component {
 				}
 			}
 		).catch(err=> alert(err));
+
 		
 	}
 

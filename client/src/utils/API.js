@@ -18,12 +18,16 @@ export default {
   },
   // Saves a book to the database
   saveGame: function(game) {
+
     return instance.post("/api/save", game);
+
   },
   getArenas: function() {
     return instance.get("/api/arenas");
   },
   saveUser: function(user) {
+
     return instance.post("/api/user");
+
   }
 };

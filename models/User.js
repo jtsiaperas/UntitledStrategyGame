@@ -9,8 +9,7 @@ var UserSchema = new Schema({
   // `title` is required and of type String
   _id: {
     type: Schema.Types.ObjectId,
-    required: true,
-    unique: true
+    required: true
   },
 
   name: {
@@ -19,10 +18,10 @@ var UserSchema = new Schema({
     unique: true
   },
 
-  saves:{[
+  saves:{
     type: Schema.Types.ObjectId,
     ref: "Save"
-  ]}
+  }
 
 });
 

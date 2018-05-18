@@ -18,7 +18,7 @@ const handleAuthentication = (nextState, replace) => {
 export const makeMainRoutes = () => {
   auth.getProfile();
   return (
-    <Router history={history}>
+    <Router history={history} component={App}>
       <div>
         <Route exact path="/" render={(props) => <App {...props} auth={auth} />} />
         <Route path="/callback" render={(props) => {
