@@ -1,4 +1,5 @@
 import React,{Component} from "react";
+import API from "../../utils/API";
 import "./board.css";
 
 class Board extends Component{
@@ -36,7 +37,10 @@ class Board extends Component{
 
 		canvas.width= this.props.width;
 		canvas.height= this.props.height;
-
+		let user = localStorage.getItem('profile');
+			API.saveUser(user)
+			.then(result => console.log(result))
+			.catch(err => console.log(err));
 		
 		var offsetY = 0;
 		var offsetX = 0;
@@ -570,7 +574,11 @@ placeCharacter = event =>{
 
 		this.setState({player1Army: player1Army, player2Army: player2Army,tiles: tiles, highlights:highlights, active: active});
 	}
- 	
+saveGame = state => {
+	API.saveGame(state)
+	.then(()=>alert("Game saved!"))
+	.catch(err=> console.log(err));
+}
 
 	render(){
 		if (this.state.context)
@@ -584,6 +592,8 @@ placeCharacter = event =>{
 			<div>
 			<canvas ref={this.canvasRef} onClick={this.handleClick} onMouseMove={this.handleMouseMove} />
 			<button onClick={this.endTurn}>End Turn</button>
+			<button onClick={() => this.saveGame(this.state)}>Save Game</button>
+			<button onClick={() => window.location.replace("/")}>Exit Game</button>
 			</div>
 		);
 	}

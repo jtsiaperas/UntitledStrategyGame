@@ -45,18 +45,19 @@ if (process.env.NODE_ENV === "production") {
 }
 
 
-app.get("/api/user", /*authCheck,*/ function(req,res){
+app.get("/api/user/:id", /*authCheck,*/ function(req,res){
 
-	db.User.findOne({_id: req.user_id})
+	db.User.findOne({_id: req.params.id})
 	.then(user => res.json(user))
 	.catch(err => res.json(err));
 });
 
 
 app.post("/api/user", /*authCheck,*/ function(req,res){
-  let user = req.body;
+  let user = req.body.user.toString();
+  console.log(user);
 
-	db.User.create({_id: user.id, name: user.name})
+	db.User.findOneAndUpdate({_id: user},{_id: user},{upsert: true})
 	.then(user => res.json(user))
 	.catch(err => res.json(err));
 });
@@ -85,6 +86,7 @@ app.post("/api/save", /*authCheck,*/ function(req,res){
 
 	db.Save.create(req.body)
 	.then(save => {
+		console.log(save);
 		return db.User.findOneAndUpdate({_id: req.id},{$push: {saves: save._id}})
 	})
 	.then(user => res.json(user))

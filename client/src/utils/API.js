@@ -6,7 +6,7 @@ var instance = axios.create({
 export default {
   // Gets all books
   getSaves: function(id) {
-    return instance.get(`/api/load/${id}`);
+    return instance.get("/api/load/"+id);
   },
   // Gets the book with the given id
   getCharacters: function(faction) {
@@ -18,16 +18,19 @@ export default {
   },
   // Saves a book to the database
   saveGame: function(game) {
-
-    return instance.post("/api/save", game);
-
+    let profile = localStorage.getItem('profile');
+    console.log(profile);
+    return instance.post("/api/save", {time: Date.now(),clicked: game.clicked,acive: game.active,tiles: game.tiles, player1Army: game.player1Army, player2Army: game.player2Army, charactersPlaced: game.charactersPlaced, id:profile});
   },
   getArenas: function() {
     return instance.get("/api/arenas");
   },
+  getUser: function(id) {
+    return instance.get("/api/user/"+id);
+  },
   saveUser: function(user) {
 
-    return instance.post("/api/user");
+    return instance.post("/api/user",{user:user});
 
   }
 };

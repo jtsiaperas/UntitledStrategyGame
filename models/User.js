@@ -8,20 +8,14 @@ var Schema = mongoose.Schema;
 var UserSchema = new Schema({
   // `title` is required and of type String
   _id: {
-    type: Schema.Types.ObjectId,
+    type: String,
     required: true
   },
 
-  name: {
-    type: String,
-    required: true,
-    unique: true
-  },
-
-  saves:{
+  saves:[{
     type: Schema.Types.ObjectId,
     ref: "Save"
-  }
+  }]
 
 });
 

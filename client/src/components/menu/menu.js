@@ -1,9 +1,10 @@
 import React from "react";
+import API from "../../utils/API";
 import "./menu.css";
 
 const Menu = props => {
-	
-		console.log(props);
+		
+
 		return(
 			<div id = "menu">
 				{props.loggedIn() ?

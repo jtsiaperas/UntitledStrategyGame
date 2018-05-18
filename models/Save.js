@@ -11,23 +11,23 @@ var SaveSchema = new Schema({
     type: Date,
     required: true
   },
-
-  title: {
-    type: String,
-    required: true
+  clicked:{
+  	type: Boolean
   },
-  
   active: {
+    type: {}
+  },
+  tiles: {
     type: Array
   },
-
-  arena: {
-    type: Schema.Types.ObjectId,
-    ref: "Arena"
-  },
- 
-  characters: {
+  player1Army: {
     type: Array
+  },
+  player2Army: {
+    type: Array
+  },
+  charactersPlaced: {
+  	type: Boolean
   }
 });
 
