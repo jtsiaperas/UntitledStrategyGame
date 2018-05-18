@@ -7,7 +7,8 @@ class Game extends Component {
 		super(props);
 
 		this.state = {
-			characters:props.characters,
+			player1Characters:props.player1Characters,
+			player2Characters: props.player2Characters,
 			width: document.documentElement.clientWidth,
 			height: document.documentElement.clientHeight,
 			tiles: props.arena.tiles,
@@ -29,7 +30,7 @@ class Game extends Component {
 		
 		return(
 			<div id="view">
-			<Board width={this.state.width} tileSize={this.state.tileSize} height={this.state.height} characters={this.state.characters} tiles={this.state.tiles} rows={this.state.rows} cols={this.state.cols} />
+			<Board width={this.state.width} tileSize={this.state.tileSize} height={this.state.height} player1Characters={this.state.player1Characters} player2Characters={this.state.player2Characters} tiles={this.state.tiles} rows={this.state.rows} cols={this.state.cols} />
 			</div>
 		);
 	}

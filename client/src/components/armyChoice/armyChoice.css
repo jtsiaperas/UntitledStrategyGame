@@ -3,3 +3,22 @@
 	max-height: 100vh;
 	max-width: 100%;
 }
+
+table {
+	width: 100%;
+}
+
+td,th {
+	padding-left: 1rem;
+}
+th{
+	padding-top: .5rem;
+	padding-bottom: .5rem;
+}
+td{
+	padding-bottom: .5rem;
+}
+
+.card{
+	margin-bottom: 1rem;
+}

@@ -4,7 +4,7 @@ import "./arenaChoice.css";
 const ArenaChoice = props => {
 		console.log(props);
 		return(
-			<div id = "arenaChoice">
+			<div id = "arenaChoice" className="container">
 				{ 	props.arenas ? (
 					props.arenas.map((arena,index) => {
 						return(

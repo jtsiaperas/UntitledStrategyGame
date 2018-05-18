@@ -16,9 +16,12 @@ class NewGame extends Component {
 		characters: false,
 		chose: false,
 		points: 0,
-		faction: false,
+		player1Faction: false,
+		player2Faction: false,
 		startGame: false,
-		army:[]	
+		player1Army:[],
+		player2Army:[],
+		player1Done: false
 	}
 
 	componentDidMount(){
@@ -35,32 +38,67 @@ class NewGame extends Component {
 	
 	chooseArena = arena =>{
 		let points = arena.points;
-		this.setState({chose:arena, points: points});
+		let copiedArena = Object.assign({},arena);
+		this.setState({chose:copiedArena, points: points});
 	}
 
-	chooseFaction = faction =>{
+	chooseFaction = (faction,player) =>{
 		API.getCharacters(faction).then(
 			characters=>
-				this.setState({faction: faction, characters: characters.data})
+			{
+				if(player==="player1")
+				{
+					this.setState({player1Faction: faction, characters: characters.data})
+				}
+				else
+				{	
+					let points = this.state.chose.points;
+					this.setState({player2Faction: faction, characters: characters.data,player1Faction:true,points:points})
+				}
+			}
 		).catch(err=> alert(err));
 		
 	}
 
-	chooseCharacter = index =>{
+	chooseCharacter = (index,player) =>{
+		
 		let characters = this.state.characters.slice();
 		let character = Object.assign({},characters[index]);
-		let army = this.state.army.slice();
+		let army = [];
+		if (player === "player1")
+		{
+		 	army = this.state.player1Army.slice();
+		}
+		else
+		{
+			army = this.state.player2Army.slice();
+		}
+
 		let startGame = false;
-		let points = this.state.points - character.pointValue;
+		let points = this.state.points;
+		points -= character.pointValue;
 		if (points >=0)
 		{
 			character.id = army.length;
 			army.push(character);
-			if(points == 0)
+
+			if(points === 0 && this.state.player1Done && this.state.player1Army.length > 0)
 			{
 				startGame = true;
 			}
-			this.setState({points:points,army:army,startGame:startGame});
+			else if (points === 0 && !this.state.player1Done)
+			{
+				this.setState({player1Done:true, player1Faction:false, points:100});
+			}
+
+			if (player === "player1")
+			{
+				this.setState({points:points,player1Army:army,startGame:startGame});
+			}
+			else
+			{
+				this.setState({points:points,player2Army:army,startGame:startGame});
+			}
 		}
 		else
 		{
@@ -73,16 +111,16 @@ class NewGame extends Component {
  	render(){
 		
 		return(
-			<div id="newGame" className="container">
+			<div id="newGame">
 			{this.state.startGame?(
 
-				<Game arena={this.state.chose} characters={this.state.army} {...this.props} /> ):
+				<Game arena={this.state.chose} player1Characters={this.state.player1Army} player2Characters={this.state.player2Army} {...this.props} /> ):
 				(	
-					this.state.faction ?(
-						<ArmyChoice characters={this.state.characters} chooseCharacter={this.chooseCharacter} points={this.state.points} />
+					this.state.player1Faction ?(
+						<ArmyChoice characters={this.state.characters} player1Done={this.state.player1Done} chooseCharacter={this.chooseCharacter} points={this.state.points} />
 					):
 					(this.state.chose ? (
-							<FactionChoice factions={factions} chooseFaction={this.chooseFaction} />
+							<FactionChoice factions={factions} player1Done={this.state.player1Done} chooseFaction={this.chooseFaction} />
 						):
 						(
 							<ArenaChoice arenas={this.state.arenas} chooseArena={this.chooseArena} />

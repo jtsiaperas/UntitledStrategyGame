@@ -16,10 +16,13 @@ class Board extends Component{
 			active: false,
 			target: false,
 			charactersPlaced:false,
-			playerArmy:[],
-			characters: this.props.characters,
+			player1Army:[],
+			player2Army:[],
+			player1Characters: this.props.player1Characters,
+			player2Characters: this.props.player2Characters,
 			tiles: this.props.tiles,
-			clicked: false
+			clicked: false,
+			player1Turn: true
 			
 		}
 		this.canvasRef = React.createRef();
@@ -107,7 +110,14 @@ class Board extends Component{
 
 		if(!this.state.charactersPlaced)
 		{
-			this.drawCharacterPool(this.state.characters,tileSize,context,spriteSheet,zoom,offsetX,offsetY);
+			if(this.state.player1Turn)
+			{
+				this.drawCharacterPool(this.state.player1Characters,tileSize,context,spriteSheet,zoom,offsetX,offsetY);
+			}
+			else
+			{
+				this.drawCharacterPool(this.state.player2Characters,tileSize,context,spriteSheet,zoom,offsetX,offsetY);
+			}
 		}
 
 	}
@@ -116,7 +126,11 @@ class Board extends Component{
 drawCharacterPool = (characters,tileSize,context,spriteSheet,zoom,offsetX,offsetY) =>{
 	let startX = 3*tileSize;
 	let startY = 3*tileSize;
-		
+	if (!this.state.player1Turn)
+	{
+		startY *= 2;
+	}	
+
 	context.fillStyle="white";
    	context.fillRect(startX-2,startY-2,(6*tileSize)+4,(3*tileSize)+4);
 
@@ -157,7 +171,10 @@ drawCharacterPool = (characters,tileSize,context,spriteSheet,zoom,offsetX,offset
 }
 
 drawTiles = (tiles,tileSize,context,spriteSheet,zoom,offsetX,offsetY) =>{
-		
+	if (!this.state.player1Turn)
+	{
+		offsetY = zoom*tileSize*(Math.floor(this.props.rows/2));
+	}
 	tiles.map((row,indexR) => {
 			
 		row.map((col,indexC) =>{
@@ -319,12 +336,17 @@ handleClick = event => {
 		let click = true;
 		let x = Math.floor(event.clientX/(this.props.tileSize*this.state.zoom));
 		let y = Math.floor(event.clientY/(this.props.tileSize*this.state.zoom));
-		let characters = this.state.characters.slice();
-		let army = this.state.playerArmy.slice();
+		let characters = this.state.player1Characters.slice();
+		let army = this.state.player1Army.slice();
+		let player1 = false;
+		if(!this.state.player1Turn){
+			characters = this.state.player2Characters.slice();
+			army = this.state.player2Army.slice();
+		}
 		let charactersPlaced = this.state.charactersPlaced;
 		let tiles = this.state.tiles.slice();
 		let active = false;
-		if (characters.length >= 1)
+		if (characters.length >= 1 && this.state.player1Turn)
 		{
 			if (x < this.props.cols && y < 2 && !tiles[y][x].occupied && this.state.active)
 			{
@@ -341,17 +363,53 @@ handleClick = event => {
 			}
 			else if(x>2&&y>3)
 			{
-				active = characters[x-3];
+				if (y == 5)
+				{
+					active = characters[x+3];
+				}
+				else
+				{
+					active = characters[x-3];
+				}
 			}
 		}
-		if (characters.length < 1)
+		else if (characters.length >=1 && !this.state.player1Turn)
 		{
-			charactersPlaced = true;
+			if (x < this.props.cols && y > 9 && !tiles[y][x].occupied && this.state.active)
+			{
+				let char = this.state.active;
+				char.position = [x,y];
+				char.didMove = false;
+				char.didAttack = false;
+				tiles[y][x].character = char;
+				tiles[y][x].occupied = true;
+				army.push(char);
+				characters = characters.filter(character => character.id !== char.id);
+				console.log(characters);
+			}
+			else if(x>2&&y>6)
+			{
+				if (y == 8)
+				{
+					active = characters[x+3];
+				}
+				else
+				{
+					active = characters[x-3];
+				}
+			}
+		}
+		if (characters.length < 1 && this.state.player1Turn)
+		{
 			let ctx = this.state.context;
+			player1 = false;
 			ctx.clearRect(0,0,this.props.width,this.props.height);
 		}
 		
-		this.setState({playerArmy:army,characters:characters,charactersPlaced:charactersPlaced, tiles: tiles, click: click, active:active});
+		if(this.state.player1Turn)
+		{	
+			this.setState({player1Army:army,player1Characters:characters,charactersPlaced:charactersPlaced, tiles: tiles, click: click, active:active, player1Turn: player1});
+		}
 	}
 
 	handleMouseMove = event =>{
@@ -433,9 +491,11 @@ handleClick = event => {
 		{
 			this.drawTiles(this.state.tiles,this.props.tileSize,this.state.context,this.state.spriteSheet,this.state.zoom,this.state.offsetX,this.state.offsetY);
 			this.drawHighlights(this.state.highlights,this.props.tileSize,this.state.context,this.state.offsetX, this.state.offsetY);
-			this.drawCharacters(this.state.playerArmy,this.props.tileSize,this.state.context,this.state.spriteSheet,this.state.zoom,this.state.offsetX,this.state.offsetY);
+			this.drawCharacters(this.state.player1Army,this.props.tileSize,this.state.context,this.state.spriteSheet,this.state.zoom,this.state.offsetX,this.state.offsetY);
+			this.drawCharacters(this.state.player2Army,this.props.tileSize,this.state.context,this.state.spriteSheet,this.state.zoom,this.state.offsetX,this.state.offsetY);
 		}
 		return(
+			
 			<canvas ref={this.canvasRef} onClick={this.handleClick} onMouseMove={this.handleMouseMove} />
 		);
 	}
