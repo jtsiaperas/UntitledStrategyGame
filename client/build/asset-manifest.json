@@ -1,7 +1,18 @@
 {
+<<<<<<< HEAD
   "main.css": "static/css/main.29686f1f.css",
   "main.css.map": "static/css/main.29686f1f.css.map",
   "main.js": "static/js/main.6cb5bfa0.js",
   "main.js.map": "static/js/main.6cb5bfa0.js.map",
   "static\\media\\loading.svg": "static/media/loading.c5590569.svg"
+=======
+
+  "main.css": "static/css/main.c5160d4d.css",
+  "main.css.map": "static/css/main.c5160d4d.css.map",
+  "main.js": "static/js/main.fb438dba.js",
+  "main.js.map": "static/js/main.fb438dba.js.map",
+  "static\\media\\loading.svg": "static/media/loading.c5590569.svg",
+  "static\\media\\tileSheet.png": "static/media/tileSheet.258af2f6.png"
+
+>>>>>>> 9e4da1ecdf7c8ae354cb1cab9de72012278566b7
 }

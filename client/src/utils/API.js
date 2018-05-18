@@ -1,26 +1,33 @@
 import axios from "axios";
+var instance = axios.create({
+  baseURL:"http://localhost:3001"
+});
 
 export default {
   // Gets all books
   getSaves: function(id) {
-    return axios.get(`/api/load/${id}`);
+    return instance.get(`/api/load/${id}`);
   },
   // Gets the book with the given id
   getCharacters: function(faction) {
-    return axios.get("/api/articles/" + faction);
+    return instance.get("/api/characters/" + faction);
   },
   // Deletes the book with the given id
   deleteSave: function(id) {
-    return axios.delete("/api/save/" + id);
+    return instance.delete("/api/save/" + id);
   },
   // Saves a book to the database
   saveGame: function(game) {
-    return axios.post("/api/save", game,);
+
+    return instance.post("/api/save", game);
+
   },
   getArenas: function() {
-    return axios.get("/api/arenas");
+    return instance.get("/api/arenas");
   },
   saveUser: function(user) {
-    return axios.post("/api/user",user,);
+
+    return instance.post("/api/user");
+
   }
 };

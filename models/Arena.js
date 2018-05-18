@@ -31,6 +31,11 @@ var ArenaSchema = new Schema({
     type: Number,
     required: true
   },
+
+  tileSize:{
+    type: Number,
+    required: true
+  },
   
   tiles: {
     type: Array,

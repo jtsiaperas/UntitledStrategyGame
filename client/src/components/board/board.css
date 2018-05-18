@@ -1,4 +1,3 @@
-#board {
-	background-color: orange;
-	overflow: auto;
+canvas {
+	float:left;
 }
