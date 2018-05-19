@@ -8,3 +8,4 @@ public/*
 dist
 coverage/
 .nyc_output/
+client/src/components/auth/auth0-variables.js
