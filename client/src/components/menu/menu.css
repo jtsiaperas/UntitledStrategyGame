@@ -1,5 +1,28 @@
 #menu {
 	background-color: black;
-	max-height: 100vh;
-	max-width: 100%;
+	color: white;
+	overflow: auto;
+}
+
+.btn{
+	width: 100%;
+	border-radius: 0px;
+	background-color: black;
+	color: white;
+}
+
+hr{
+	color: white;
+}
+
+.jumbotron{
+	border-radius: 0px;
+	color: black;
+	background-color: gray;
+}
+
+#menu .card{
+	border-radius: 0px;
+	color: black;
+	background-color: gray;
 }

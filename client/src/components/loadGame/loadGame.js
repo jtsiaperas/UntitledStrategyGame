@@ -19,7 +19,7 @@ class LoadGame extends Component {
 			API.getSaves(this.state.profile)
 			.then(saves => {
 				console.log(saves);
-				this.setState({saves: saves.data})
+				this.setState({saves: saves})
 			})
 			.catch(err => console.log(err));
 	}
@@ -32,7 +32,7 @@ class LoadGame extends Component {
 		
 		return(
 			<div id="loadGame">
-			
+			<button className = "btn" onClick={() => window.location.replace('/')}> Menu </button>
 			{this.state.saves.length>0 ? (this.state.saves.map((save,index) => <button className="btn save" id={index} key={index} onClick = {()=>this.loadGame({index})}>{save.time}</button>)):(<h1>No Saves Found</h1>)}
 			</div>
 		);

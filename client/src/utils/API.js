@@ -17,7 +17,6 @@ export default {
   // Saves a book to the database
   saveGame: function(game) {
     let profile = localStorage.getItem('profile');
-    console.log(profile);
     return instance.post("/api/save", {time: Date.now(),clicked: game.clicked,acive: game.active,tiles: game.tiles, player1Army: game.player1Army, player2Army: game.player2Army, charactersPlaced: game.charactersPlaced, id:profile});
   },
   getArenas: function() {

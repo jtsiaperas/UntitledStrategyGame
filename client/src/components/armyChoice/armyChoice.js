@@ -3,24 +3,30 @@ import "./armyChoice.css";
 
 const ArmyChoice = props => {
 		let player = "player1";
+		let title = "Player 1";
 		if (props.player1Done)
 		{
 			player = "player2";
+			title = "Player 2";
 		}
 		return(
 			<div id = "armyChoice" className="container">
 				
 					<div className="row">
-					<h2>Choose {player} Characters</h2>
-					<br />
-					<h3>{props.points} remaining</h3>
+					<div className="col-12">
+						<div className="card">
+							<div className="card-header text-center">
+							<h1>{`Choose ${title} Troops: ${props.points} points remaining`}</h1>
+							</div>
+						</div>
+					</div>
 					</div>
 					<div className="row">
 					{
 						props.characters.map((character,index) =>{
 						return(
 						<div className="col-4" key={index}>
-							<div className="card"  onClick={()=>props.chooseCharacter(index,player)}>
+							<div className="card characterCard"  onClick={()=>props.chooseCharacter(index,player)}>
 							<div className="card-header">
 								{character.name}
 							</div>

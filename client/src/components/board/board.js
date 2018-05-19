@@ -134,11 +134,13 @@ drawCharacterPool = (characters,tileSize,context,spriteSheet,zoom,offsetX,offset
 	let startY = 3*tileSize;
 	
 	let num = 1;
+	
 
 	if(!this.state.player1Turn)
 	{
 		startY = 6*tileSize;
 		num = 2;
+		
 	}
 
 	context.fillStyle="white";
@@ -151,11 +153,39 @@ drawCharacterPool = (characters,tileSize,context,spriteSheet,zoom,offsetX,offset
    	context.font = "17px sans-serif";
    	
 
-	context.fillText(`Deploy Player ${num} Troops`, startX+8, startY+18);
+	context.fillText(`Deploy Player ${num} Troops`, startX+8, startY+20);
 	
 	context.fillStyle="white";
    	context.fillRect(startX,startY+30,(6*tileSize),2);
-
+   	
+   	context.globalAlpha = 0.2;
+   	if(this.state.player1Turn)
+   	{
+   		for(let i=0; i<2; i++)
+   		{
+   			for(let j=0; j<this.props.cols; j++)
+   			{
+   				var x = j*tileSize;
+				var y = i*tileSize;
+				context.fillStyle="yellow";
+    			context.fillRect(x,y,tileSize,tileSize);
+   			}
+   		}
+   	}
+   	else
+   	{
+   		for(let i=this.props.rows-2; i<this.props.rows; i++)
+   		{
+   			for(let j=0; j<this.props.cols; j++)
+   			{
+   				var x = j*tileSize;
+				var y = i*tileSize;
+				context.fillStyle="yellow";
+    			context.fillRect(x,y,tileSize,tileSize);
+   			}
+   		}
+   	}
+   	context.globalAlpha = 1.0;
 	characters.forEach((char,index) => {
 		let x = char.x;
 		let y = char.y;
@@ -219,7 +249,7 @@ drawHighlights = (highlights,tileSize,context,offsetX,offsetY) =>{
 				var x = highlight.x*tileSize;
 				var y = highlight.y*tileSize;
 				
-				context.globalAlpha = 0.5;
+				context.globalAlpha = 0.3;
 				context.fillStyle=highlight.type;
     			context.fillRect(x,y,tileSize,tileSize);
     			context.globalAlpha = 1.0;
@@ -238,7 +268,7 @@ handleClick = event => {
 
 		else
 		{
-			let x = Math.floor(event.clientX/(this.props.tileSize*this.state.zoom));
+			let x = Math.floor((event.clientX-200)/(this.props.tileSize*this.state.zoom));
 			let y =  Math.floor(event.clientY/(this.props.tileSize*this.state.zoom));
 			
 			if(x<this.props.cols&&y<this.props.rows&&x>=0&&y>=0)
@@ -292,19 +322,8 @@ handleClick = event => {
 						for(let dy=1; dy<=range; dy++)
 						{
 				
-							if(y-dy >= 0)
-							{
-								let newY= y-dy;
-								highlights.push({type:color,x:x,y:newY});
-							}
-
-							if(y+dy < this.props.rows)
-							{
-								let newY= y+dy;
-								highlights.push({type:color,x:x,y:newY});
-							}
-
-							if (dy === dx && dy+dx <= range)
+							
+							if (dy+dx <= range)
 							{
 								if(x-dx >= 0)
 								{
@@ -340,7 +359,21 @@ handleClick = event => {
 							}
 						}
 					}
-		
+					
+					for(let dy=1; dy<=range; dy++)
+					{
+						if(y-dy >= 0)
+						{
+							let newY= y-dy;
+							highlights.push({type:color,x:x,y:newY});
+						}
+
+						if(y+dy < this.props.rows)
+						{
+							let newY= y+dy;
+							highlights.push({type:color,x:x,y:newY});
+						}
+					}
 				this.setState({tiles: tiles, active: character, highlights:highlights, click:click});
 				}
 		
@@ -361,7 +394,7 @@ handleClick = event => {
 
 placeCharacter = event =>{
 		let click = true;
-		let x = Math.floor(event.clientX/(this.props.tileSize*this.state.zoom));
+		let x = Math.floor((event.clientX-200)/(this.props.tileSize*this.state.zoom));
 		let y = Math.floor(event.clientY/(this.props.tileSize*this.state.zoom));
 		let highlights = [];
 		let characters = this.state.player1Characters.slice();
@@ -450,7 +483,7 @@ placeCharacter = event =>{
 }
 
 	handleMouseMove = event =>{
-		let x = Math.floor(event.clientX/(this.props.tileSize*this.state.zoom));
+		let x = Math.floor((event.clientX-200)/(this.props.tileSize*this.state.zoom));
 		let y = Math.floor(event.clientY/(this.props.tileSize*this.state.zoom));
 		let highlights = this.state.highlights.slice().filter(highlight => highlight.type != "orange");
 		let click = false;
@@ -479,7 +512,7 @@ placeCharacter = event =>{
 		this.setState({player1Turn:!this.state.player1Turn,player2Army:player2Army,player1Army:player1Army});
 	}
 	handleMove = event => {
-		let newX = Math.floor(event.clientX/(this.props.tileSize*this.state.zoom));
+		let newX = Math.floor((event.clientX-200)/(this.props.tileSize*this.state.zoom));
 		let newY = Math.floor(event.clientY/(this.props.tileSize*this.state.zoom));
 		let tiles = this.state.tiles.slice();
 		let characters = this.state.player1Army.slice();
@@ -589,11 +622,39 @@ saveGame = state => {
 			this.drawHighlights(this.state.highlights,this.props.tileSize,this.state.context,this.state.offsetX, this.state.offsetY);
 		}
 		return(
-			<div>
+			<div className="boardDiv">
+			<div className="tips">
+				<table className="table">
+					<tr>
+					<th>Tips:</th>
+					</tr>
+					<tr>
+					<td>
+						Deploy troops by first clicking them, then clicking one of the highlighted tiles.
+					</td>
+					</tr>
+					<tr>
+					<td>
+						Once troops are deployed, select units by clicking them.
+					</td>
+					</tr>
+					<tr>
+					<td>
+						Click on one of the tiles highlighted in green to move the unit.
+					</td>
+					</tr>
+					<tr>
+					<td>
+						Attack enemies by moving within range and clicking the enemy unit highlighted in red.
+					</td>
+					</tr>
+				</table>
+
+			</div>
 			<canvas ref={this.canvasRef} onClick={this.handleClick} onMouseMove={this.handleMouseMove} />
-			<button onClick={this.endTurn}>End Turn</button>
-			<button onClick={() => this.saveGame(this.state)}>Save Game</button>
-			<button onClick={() => window.location.replace("/")}>Exit Game</button>
+			<button className="vertical text-center" onClick={this.endTurn}><span><strong>End Turn</strong></span></button>
+			<button className="vertical text-center" onClick={() => this.saveGame(this.state)}><span><strong>Save Game</strong></span></button>
+			<button className="vertical text-center" onClick={() => window.location.replace("/")}><span><strong>Exit Game</strong></span></button>
 			</div>
 		);
 	}
