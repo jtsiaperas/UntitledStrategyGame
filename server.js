@@ -83,11 +83,11 @@ app.get("/api/characters/:faction", /*authCheck,*/ function(req,res){
 
 
 app.post("/api/save", /*authCheck,*/ function(req,res){
-
+	console.log(req.body.id);
 	db.Save.create(req.body)
 	.then(save => {
-		console.log(save);
-		return db.User.findOneAndUpdate({_id: req.id},{$push: {saves: save._id}})
+		
+		return db.User.findOneAndUpdate({_id: req.body.id},{$push: {saves: save._id}});
 	})
 	.then(user => res.json(user))
 	.catch(err => res.json(err));
@@ -102,6 +102,7 @@ app.delete("/api/save/:id", /*authCheck,*/ function(req,res){
 });
 
 app.get("/api/load/:id", /*authCheck,*/ function(req,res){
+	console.log(req.params.id);
 	db.User.findOne({_id: req.params.id})
 	.populate("saves")
 	.then(user => res.json(user))

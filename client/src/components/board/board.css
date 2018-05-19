@@ -33,4 +33,5 @@ canvas {
 	height: 100vh;
 	float: left;
 	color: white;
+	font-size: .9rem;
 }

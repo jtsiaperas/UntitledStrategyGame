@@ -23,7 +23,8 @@ class Board extends Component{
 			player2Characters: this.props.player2Characters,
 			tiles: this.props.tiles,
 			clicked: false,
-			player1Turn: true
+			player1Turn: true,
+			attackResults:""
 			
 		}
 		this.canvasRef = React.createRef();
@@ -379,6 +380,27 @@ handleClick = event => {
 		
 				else if(tiles[y][x].occupied&&this.state.active)
 				{
+					let attackTypes = this.state.active.attackType.split(",");
+					let aoe = false;
+					let arc = false;
+					attackTypes.forEach(word=> {
+						if(word==="aoe")
+						{
+							aoe=true;
+						}
+						if(word==="arc")
+						{
+							arc=true;
+						}
+					});
+
+					if(arc)
+					{
+						this.resolveAttack({attacker: this.state.active, defender:tiles[y][x+1].character});
+						this.resolveAttack({attacker: this.state.active, defender:tiles[y][x-1].character});
+						this.resolveAttack({attacker: this.state.active, defender:tiles[y][x].character});
+					}
+
 					this.resolveAttack({attacker: this.state.active, defender:tiles[y][x].character});
 				}
 	
@@ -548,11 +570,23 @@ placeCharacter = event =>{
 
 		}	
 
+		let allMoved = true;
+		characters.forEach(char=>{
+			if(!char.didMove)
+			{
+				allMoved=false;
+			}
+		})
+		if(allMoved)
+		{
+			alert("All of your troops have moved! Click the end turn button to end your turn.");
+		}
 		this.setState({tiles: tiles, active: false, characters: characters, highlights: highlights});
 	}
 
 	resolveAttack = props => {
-		
+		if(props.defender)
+		{	
 		let player1Army = this.state.player1Army.slice();
 		let player2Army = this.state.player2Army.slice();
 		let tiles = this.state.tiles.slice();
@@ -561,7 +595,7 @@ placeCharacter = event =>{
 		let toWound = 4+(props.attacker.skill-props.defender.skill);
 		let active = false;
 		let distance = Math.abs(props.attacker.position[0]-props.defender.position[0])+ Math.abs(props.attacker.position[1]-props.defender.position[1]);
-		
+		let flavorText = "";
 		if (!props.attacker.didAttack && distance <= props.attacker.rangeMax && props.attacker.owner != props.defender.owner)
 		{
 			for (let i = 0; i<props.attacker.strength; i++)
@@ -574,7 +608,14 @@ placeCharacter = event =>{
 			}
 
 			props.defender.health -= hits;
-
+			if(props.attacker.owner === "player1")
+			{
+				flavorText = `Player 1's ${props.attacker.name} attacked Player 2's ${props.defender.name}, dealing ${hits} damage!`;
+			}
+			else
+			{
+				flavorText = `Player 2's ${props.attacker.name} attacked Player 1's ${props.defender.name}, dealing ${hits} damage!`;
+			}
 			if(props.defender.health < 1)
 			{
 				tiles[props.defender.position[1]][props.defender.position[0]].character = false;
@@ -605,7 +646,8 @@ placeCharacter = event =>{
 			alert("You should not attack your own troops!");
 		}
 
-		this.setState({player1Army: player1Army, player2Army: player2Army,tiles: tiles, highlights:highlights, active: active});
+		this.setState({player1Army: player1Army, player2Army: player2Army,tiles: tiles, highlights:highlights, active: active, attackResults:flavorText});
+	}
 	}
 saveGame = state => {
 	API.saveGame(state)
@@ -625,6 +667,7 @@ saveGame = state => {
 			<div className="boardDiv">
 			<div className="tips">
 				<table className="table">
+					<tbody>
 					<tr>
 					<th>Tips:</th>
 					</tr>
@@ -648,6 +691,17 @@ saveGame = state => {
 						Attack enemies by moving within range and clicking the enemy unit highlighted in red.
 					</td>
 					</tr>
+					<tr>
+					<td>
+						{this.state.player1Turn ?("It is currently Player 1's turn."):("It is currently Player 2's turn.")}
+					</td>
+					</tr>
+					<tr>
+					<td>
+					{this.state.attackResults}
+					</td>
+					</tr>
+					</tbody>
 				</table>
 
 			</div>
