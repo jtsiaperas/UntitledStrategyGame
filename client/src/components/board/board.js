@@ -571,15 +571,25 @@ placeCharacter = event =>{
 		}	
 
 		let allMoved = true;
+		let allAttacked = true;
 		characters.forEach(char=>{
 			if(!char.didMove)
 			{
 				allMoved=false;
 			}
-		})
+			if(!char.didAttack)
+			{
+				allAttacked = false;
+			}
+		});
+
 		if(allMoved)
 		{
-			alert("All of your troops have moved! Click the end turn button to end your turn.");
+			alert("All of your troops have moved! Click the end turn button.");
+		}
+		else if(allAttacked)
+		{
+			alert("All of your troops have attacked! Click the end turn button.")
 		}
 		this.setState({tiles: tiles, active: false, characters: characters, highlights: highlights});
 	}
@@ -593,6 +603,14 @@ placeCharacter = event =>{
 		let highlights = [];
 		let hits = 0;
 		let toWound = 4+(props.attacker.skill-props.defender.skill);
+		if (toWound > 5)
+		{
+			toWound = 5;
+		}
+		else if(toWound <1)
+		{
+			toWound = 1;
+		}
 		let active = false;
 		let distance = Math.abs(props.attacker.position[0]-props.defender.position[0])+ Math.abs(props.attacker.position[1]-props.defender.position[1]);
 		let flavorText = "";

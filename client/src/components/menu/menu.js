@@ -103,7 +103,7 @@ const Menu = props => {
 							
 							<div className="card-body">	
 							Attack: The number of "attack dice" rolled, max damage<br />
-							Move: The number of tiles a unit can Move<br />
+							Move: The number of tiles a unit can Move, also affects its chance to avoid damage<br />
 							Health: The number of hits a unit can take
 							</div>
 						</div>
