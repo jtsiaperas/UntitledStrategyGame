@@ -8,7 +8,7 @@ export default class Auth {
   auth0 = new auth0.WebAuth({
     domain: AUTH_CONFIG.domain||process.env.AUTH0_DOMAIN,
     clientID: AUTH_CONFIG.clientId||process.env.CLIENT_ID,
-    redirectUri: AUTH_CONFIG.callbackUrl||"https://young-lake-41871.herokuapp.com/",
+    redirectUri: "https://young-lake-41871.herokuapp.com/",
     audience: `https://${AUTH_CONFIG.domain}/userinfo`||`https://${process.env.AUTH0_DOMAIN}/userinfo`,
     responseType: 'token id_token',
     scope: 'openid'
