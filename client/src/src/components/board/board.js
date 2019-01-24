@@ -697,7 +697,6 @@ saveGame = state => {
 					<tr>
 					<td>
 						Once troops are deployed, select units by clicking them.
-						As you can see, I just edited the code
 					</td>
 					</tr>
 					<tr>

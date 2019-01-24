@@ -1,0 +1,18 @@
+#arenaChoice {
+	background-color: black;
+	color: white;
+	overflow: auto;
+	width:100%;
+	height:100%;
+}
+
+#arenaChoice .card{
+	background-color: gray;
+	color: black;
+	border-radius: 2px;
+}
+
+.arenaCard:hover{
+	border: 2px solid white;
+
+}
