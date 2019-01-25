@@ -16,7 +16,7 @@ class App extends Component {
   render() {
    		
 		return(
-			<Menu loggedIn = {this.props.auth.isAuthenticated} goTo = {this.goTo} login = {this.props.auth.login} logout = {this.props.auth.logout} />
+			<Menu loggedIn = {this.props.auth.isAuthenticated} goTo = {route => this.props.history.replace(`/${route}`)} login = {this.props.auth.login} logout = {this.props.auth.logout} />
 			
 		);
 	}
