@@ -27,7 +27,9 @@ hr{
 }
 
 #menu .card{
-	border-radius: 0px;
+	
 	color: black;
 	background-color: gray;
+	min-height: 120px;
+	margin-bottom: 40px;
 }

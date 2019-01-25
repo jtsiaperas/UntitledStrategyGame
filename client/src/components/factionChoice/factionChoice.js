@@ -25,7 +25,7 @@ const FactionChoice = props => {
 				{	props.factions ? (
 					props.factions.map((faction,index) => {
 						return(
-						<div className="col" key={index}>
+						<div className="col-4" key={index}>
 						<div className="card factionCard" onClick={()=>props.chooseFaction(faction.name,player)}>
 							<div className="card-header">
 								{faction.name}

@@ -43,7 +43,7 @@ const Menu = props => {
 					<h1>Untitled Strategy Game</h1>
 				</div>
 				<div className="row">
-					<div className="col">
+					<div className="col-12">
 						<div className="card">
 							<div className="card-header text-center">
 								<h2>Summary</h2>
@@ -58,7 +58,7 @@ const Menu = props => {
 					</div>
 				</div>
 				<div className="row">
-					<div className="col">
+					<div className="col-12">
 						<div className="card">
 							<div className="card-header text-center">
 								<h2>How to play</h2>
@@ -67,7 +67,7 @@ const Menu = props => {
 					</div>
 				</div>
 				<div className="row">
-					<div className="col">
+					<div className="col-12">
 						<div className="card">
 							<div className="card-header text-center">
 								<h3>Building your army</h3>
@@ -80,7 +80,7 @@ const Menu = props => {
 					</div>
 				</div>
 				<div className="row">
-					<div className="col">
+					<div className="col-12">
 						<div className="card">
 							<div className="card-header text-center">
 								<h3>Gameplay</h3>
@@ -95,7 +95,7 @@ const Menu = props => {
 					</div>
 				</div>
 				<div className="row">
-					<div className="col">
+					<div className="col-12">
 						<div className="card">
 							<div className="card-header text-center">
 								<h3>Stats</h3>
